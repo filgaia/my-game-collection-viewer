@@ -5,6 +5,8 @@ You can find the most recent version of this guide [here](https://github.com/fac
 
 Guide to this approach [here](https://medium.freecodecamp.org/surge-vs-github-pages-deploying-a-create-react-app-project-c0ecbf317089)
 
+See the site [online](https://filgaia.github.io/create-react-app/)!
+
 ## Table of Contents
 
 - [Updating to New Releases](#updating-to-new-releases)
