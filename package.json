@@ -5,6 +5,7 @@
   "homepage": "https://filgaia.github.io/my-game-collection-viewer",
   "scripts": {
     "start": "react-scripts start",
+    "eslint": "eslint src --color",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "eslint": "^5.13.0",
+    "eslint-plugin-react": "^7.12.4",
     "gh-pages": "^1.2.0"
   }
 }
