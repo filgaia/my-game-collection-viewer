@@ -1,6 +1,6 @@
 See the site [online](https://filgaia.github.io/create-react-app/)!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://filgaia.github.io/my-game-collection-viewer).
 
 ## Available Scripts
 
@@ -64,6 +64,10 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/ad
 ### Deployment
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+
+#### Clean cache for deployment
+
+`rm -rf node_modules/gh-pages/.cache`
 
 ### `npm run build` fails to minify
 
