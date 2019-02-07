@@ -1,6 +1,6 @@
-See the site [online](https://filgaia.github.io/create-react-app/)!
+See the site [online](https://filgaia.github.io/my-game-collection-viewer)!
 
-This project was bootstrapped with [Create React App](https://filgaia.github.io/my-game-collection-viewer).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
