@@ -1,0 +1,12 @@
+# File Options
+files:
+    include:
+        - 'src/**/*.scss'
+    ignore:
+        - 'node_modules/**/*.scss'
+rules:
+    class-name-format:
+        - 1
+        - 
+          allow-leading-underscore: false
+          convention: hyphenatedbem
