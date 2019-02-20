@@ -6,13 +6,13 @@ import './App.scss';
 import Catalog from './../../components/catalog/catalog';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="app">
-        <Catalog />
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div className="app">
+                <Catalog />
+            </div>
+        );
+    }
 }
 
 export default hot(App);

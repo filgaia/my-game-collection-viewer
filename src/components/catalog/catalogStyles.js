@@ -1,10 +1,4 @@
-const styles = (theme) => ({
-    appBar: {
-        position: 'relative',
-    },
-    icon: {
-        marginRight: theme.spacing.unit * 2,
-    },
+const catalogStyles = (theme) => ({
     heroUnit: {
         backgroundColor: theme.palette.background.paper,
     },
@@ -12,9 +6,6 @@ const styles = (theme) => ({
         maxWidth: 600,
         margin: '0 auto',
         padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
-    },
-    heroButtons: {
-        marginTop: theme.spacing.unit * 4,
     },
     layout: {
         width: 'auto',
@@ -46,4 +37,4 @@ const styles = (theme) => ({
     },
 });
 
-export default styles;
+export default catalogStyles;
