@@ -17,36 +17,17 @@ import Navigator from './../navigator/navigator';
 import Title from './../title/title';
 import GameCard from './../gameCard/gameCard';
 import Footer from './../footer/footer';
-// @constants
-import { backup } from './../../data/db.json';
+
 // @styles
 import catalogStyles from './catalogStyles';
 
 class Catalog extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            games: get(backup, 'Game', []).slice(0, 20),
-            hasMoreItems: true
-        };
-
-        this.loadItems = this.loadItems.bind(this);
-    }
-
-    loadItems(page) {
-        const load = 20;
-        const start = page * load;
-        const items = get(backup, 'Game', []);
-        const games = items.slice(0, start + load);
-        const hasMoreItems = items.length >= start;
-
-        this.setState({ games, hasMoreItems });
-    }
 
     render() {
-        const { classes } = this.props;
-        const { games, hasMoreItems } = this.state;
+        const { classes, gamesInformation, loadJson } = this.props;
+
+        const games = gamesInformation.get('games');
+        const hasMoreItems = gamesInformation.get('hasMoreItems');
 
         const loader = <CircularProgress key={0} />; // Key to remove warning of infinite scroll
 
@@ -70,7 +51,7 @@ class Catalog extends Component {
                     <Title />
                     <InfiniteScroll
                         pageStart={0}
-                        loadMore={this.loadItems}
+                        loadMore={loadJson}
                         hasMore={hasMoreItems}
                         loader={loader}
                     >
@@ -89,6 +70,8 @@ class Catalog extends Component {
 
 Catalog.propTypes = {
     classes: PropTypes.object.isRequired,
+    gamesInformation: PropTypes.object.isRequired,
+    loadJson: PropTypes.func.isRequired
 };
 
 export default withStyles(catalogStyles)(Catalog);
