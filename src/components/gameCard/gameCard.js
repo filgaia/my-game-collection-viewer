@@ -1,7 +1,7 @@
 // @vendors
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
+import get from 'lodash/get';
 // @material
 import {
     Button,
@@ -14,6 +14,8 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 // @styles
 import gameCardStyles from './gameCardStyles';
+// @constants
+import { backup } from './../../data/db.json';
 
 class GameCard extends Component {
     constructor(props) {
@@ -35,8 +37,9 @@ class GameCard extends Component {
     }
 
     render() {
-        const { classes, title } = this.props;
+        const { classes, title, plataform } = this.props;
         const { imageSrc } = this.state;
+        const plataformData = get(backup, 'Platform').find(item => item.id === plataform);
 
         return (
             <Card className={classes.card}>
@@ -49,7 +52,7 @@ class GameCard extends Component {
                         {title}
                     </Typography>
                     <Typography>
-                        This is a media card. You can use this section to describe the content.
+                        {get(plataformData, 'name', '')}
                     </Typography>
                 </CardContent>
                 <CardActions>
@@ -65,6 +68,7 @@ class GameCard extends Component {
 GameCard.propTypes = {
     classes: PropTypes.object.isRequired,
     image: PropTypes.string.isRequired,
+    plataform: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired
 };
 

@@ -7,6 +7,7 @@ import LazyLoad from 'react-lazyload';
 import InfiniteScroll from 'react-infinite-scroller';
 // @material
 import {
+    CircularProgress,
     CssBaseline,
     Grid
 } from '@material-ui/core';
@@ -47,7 +48,7 @@ class Catalog extends Component {
         const { classes } = this.props;
         const { games, hasMoreItems } = this.state;
 
-        const loader = <div className="loader">Loading ...</div>;
+        const loader = <CircularProgress key={0} />; // Key to remove warning of infinite scroll
 
         const items = games.map(card => (
             <Grid item key={get(card, 'id')} sm={6} md={4} lg={3}>
@@ -55,6 +56,7 @@ class Catalog extends Component {
                     <GameCard
                         title={get(card, 'name', '')}
                         image={get(card, 'image_url_medium', '')}
+                        plataform={get(card, 'platform_id', 0)}
                     />
                 </LazyLoad>
             </Grid>
