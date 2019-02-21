@@ -1,6 +1,6 @@
 {
     "name": "my-game-collection-viewer",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "private": true,
     "homepage": "https://filgaia.github.io/my-game-collection-viewer",
     "scripts": {
@@ -44,6 +44,7 @@
         "fs-extra": "7.0.0",
         "html-webpack-plugin": "4.0.0-alpha.2",
         "identity-obj-proxy": "3.0.0",
+        "immutable": "^4.0.0-rc.12",
         "jest": "24.1.0",
         "jest-pnp-resolver": "1.1.0",
         "jest-resolve": "24.1.0",
@@ -63,6 +64,7 @@
         "react-lazyload": "^2.5.0",
         "react-redux": "^6.0.0",
         "redux": "^4.0.1",
+        "redux-actions": "^2.6.4",
         "redux-thunk": "^2.3.0",
         "resolve": "1.8.1",
         "style-loader": "0.23.0",
@@ -76,9 +78,11 @@
     "devDependencies": {
         "eslint": "^5.13.0",
         "eslint-plugin-react": "^7.12.4",
+        "expect-immutable": "0.0.3",
         "gh-pages": "^1.2.0",
         "node-sass": "^4.11.0",
         "react-hot-loader": "^4.7.0",
+        "redux-immutable-state-invariant": "^2.1.0",
         "sass-lint": "^1.12.1",
         "sass-loader": "^7.1.0"
     }
