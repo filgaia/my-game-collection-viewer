@@ -8,8 +8,10 @@ import {
     Card,
     CardActions,
     CardContent,
+    CardHeader,
     CardMedia,
-    Typography
+    Typography,
+    Zoom
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 // @styles
@@ -37,36 +39,40 @@ class GameCard extends Component {
     }
 
     render() {
-        const { classes, title, plataform } = this.props;
+        const { classes, description, title, plataform } = this.props;
         const { imageSrc } = this.state;
         const plataformData = get(backup, 'Platform').find(item => item.id === plataform);
 
         return (
-            <Card className={classes.card}>
-                <CardMedia
-                    className={classes.cardMedia}
-                    image={imageSrc}
-                />
-                <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        {title}
-                    </Typography>
-                    <Typography>
-                        {get(plataformData, 'name', '')}
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button size="small" color="primary">
-                        View
-                    </Button>
-                </CardActions>
-            </Card>
+            <Zoom in>
+                <Card className={classes.card}>
+                    <CardMedia
+                        className={classes.cardMedia}
+                        image={imageSrc}
+                    />
+                    <CardHeader
+                        title={title}
+                        subheader={get(plataformData, 'name', '')}
+                    />
+                    <CardContent className={classes.cardContent}>
+                        <Typography noWrap>
+                            {description}
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Button size="small" color="primary">
+                            View
+                        </Button>
+                    </CardActions>
+                </Card>
+            </Zoom>
         );
     }
 }
 
 GameCard.propTypes = {
     classes: PropTypes.object.isRequired,
+    description: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     plataform: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired
