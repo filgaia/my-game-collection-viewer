@@ -32,7 +32,7 @@ class Catalog extends Component {
         const loader = <CircularProgress key={0} />; // Key to remove warning of infinite scroll
 
         const items = games.map(card => (
-            <Grid item key={get(card, 'id')} sm={6} md={4} lg={3}>
+            <Grid item key={get(card, 'id')} xs={12} sm={6} md={4} lg={3}>
                 <LazyLoad height={250}>
                     <GameCard
                         description={get(card, 'description_short', '')}
