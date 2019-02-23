@@ -1,6 +1,6 @@
 {
     "name": "my-game-collection-viewer",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "private": true,
     "homepage": "https://filgaia.github.io/my-game-collection-viewer",
     "scripts": {
