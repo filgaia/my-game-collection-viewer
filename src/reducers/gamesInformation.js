@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 import { handleActions } from 'redux-actions';
 import get from 'lodash/get';
 //@actions
-const { actions } = require('../actions/gamesInformation');
+import { actions } from '../actions/gamesInformation';
 
 const setInitialState = () => Immutable.fromJS({
     asc: false,
