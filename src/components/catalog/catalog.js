@@ -13,10 +13,8 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 // @components
-import Navigator from './../navigator/navigator';
 import Title from './../title/title';
 import GameCard from './../gameCard/gameCard';
-import Footer from './../footer/footer';
 
 // @styles
 import catalogStyles from './catalogStyles';
@@ -70,7 +68,7 @@ class Catalog extends Component {
     }
 
     render() {
-        const { gamesInformation, shortByName } = this.props;
+        const { gamesInformation } = this.props;
 
         const loading = gamesInformation.get('loading');
 
@@ -83,9 +81,7 @@ class Catalog extends Component {
         return (
             <React.Fragment>
                 <CssBaseline />
-                <Navigator shortByName={shortByName} />
                 {catalogContainer}
-                <Footer />
             </React.Fragment >
         );
     }
@@ -96,7 +92,6 @@ Catalog.propTypes = {
     gamesInformation: PropTypes.object.isRequired,
     initGames: PropTypes.func.isRequired,
     loadGames: PropTypes.func.isRequired,
-    shortByName: PropTypes.func.isRequired
 };
 
 export default withStyles(catalogStyles)(Catalog);

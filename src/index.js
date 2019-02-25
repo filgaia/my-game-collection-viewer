@@ -1,17 +1,23 @@
+import './index.scss';
+
+//@vendors
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
-import App from './routes/app/App';
-import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
+//@config
 import configureStore from '../src/store/configureStore';
+import * as serviceWorker from './serviceWorker';
+//@components
+import App from './routes/app/App';
+import Login from './components/login/login';
 
 const store = configureStore();
 
-ReactDOM.render((
+ReactDOM.render(
     <Provider store={store}>
-        <App />
-    </Provider>
-), document.getElementById('root'));
+        <App login={<Login/>}/>
+    </Provider>,
+    document.getElementById('root')
+);
 
 serviceWorker.register();
