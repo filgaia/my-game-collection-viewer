@@ -18,7 +18,7 @@ import { withStyles } from '@material-ui/core/styles';
 // @styles
 import navigatorStyles from './navigatorStyles';
 // @constants
-import { GOOGLE_CLIENT_ID } from '../../config/index.json';
+import { GOOGLE_CLIENT_ID } from '../../data/keys.json';
 
 class Navigator extends Component {
 

@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // @components
 import Catalog from '../../components/catalog/catalog';
-import Navigator from '../../components/navigator/navigator';
 import Footer from '../../components/footer/footer';
+import Navigator from '../../components/navigator/navigator';
 // @actions
 import { initGames, loadGames, shortByName } from '../../actions/gamesInformation';
-import {actions as loginActions}  from '../../actions/login';
+import { actions as loginActions } from '../../actions/login';
 
 class App extends Component {
 
@@ -18,20 +18,17 @@ class App extends Component {
     };
 
     buildCatalog() {
-        const { gamesInformation, loadGames, login, initGames } = this.props;
-        let catalog = login;
+        const { gamesInformation, loadGames, initGames } = this.props;
 
-        if (this.checkUserAuthenticated()) {
-            catalog = (
+        return (
+            <React.Fragment>
                 <Catalog
                     gamesInformation={gamesInformation}
                     initGames={initGames}
                     loadGames={loadGames}
                 />
-            );
-        }
-
-        return catalog;
+            </React.Fragment>
+        );
     }
 
     render() {
@@ -54,7 +51,6 @@ App.propTypes = {
     gamesInformation: PropTypes.object.isRequired,
     initGames: PropTypes.func.isRequired,
     loadGames: PropTypes.func.isRequired,
-    login: PropTypes.any.isRequired,
     logoutSuccess: PropTypes.func.isRequired,
     loginInformation: PropTypes.object.isRequired,
     shortByName: PropTypes.func.isRequired

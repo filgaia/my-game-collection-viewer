@@ -1,14 +1,14 @@
 import './login.scss';
 
 //@vendors
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { GoogleLogin } from 'react-google-login';
 //@actions
-import {actions as loginActions} from '../../actions/login';
+import { actions as loginActions } from '../../actions/login';
 // @constants
-import { GOOGLE_CLIENT_ID } from '../../config/index.json';
+import { GOOGLE_CLIENT_ID } from '../../data/keys.json';
 
 class Login extends Component {
 
@@ -17,11 +17,11 @@ class Login extends Component {
     };
 
     handleLoginSuccess = response => {
-        this.props.loginSuccess({tokenId: response.tokenId});
+        this.props.loginSuccess({ tokenId: response.tokenId });
     };
 
     handleLoginFailure = response => {
-        this.props.loginFailure({error: response.error});
+        this.props.loginFailure({ error: response.error });
     };
 
     render() {
@@ -31,7 +31,7 @@ class Login extends Component {
                 <div className="login__login-button">
                     <GoogleLogin
                         clientId={GOOGLE_CLIENT_ID}
-                        buttonText="Login In"
+                        buttonText="Login"
                         onSuccess={this.handleLoginSuccess}
                         onFailure={this.handleLoginFailure}
                     />

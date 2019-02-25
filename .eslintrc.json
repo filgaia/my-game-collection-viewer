@@ -25,10 +25,6 @@
             "error",
             4
         ],
-        "linebreak-style": [
-            "warn",
-            "unix"
-        ],
         "quotes": [
             "error",
             "single"

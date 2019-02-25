@@ -6,6 +6,8 @@ import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 // @styles
 import titleStyles from './titleStyles';
+// @components
+import Login from '../../components/login/login';
 
 class Title extends Component {
     render() {
@@ -20,6 +22,7 @@ class Title extends Component {
                     <Typography variant="h6" align="center" color="textSecondary" paragraph>
                         Viewer for the great app My Game Collection!
                     </Typography>
+                    <Login />
                 </div>
             </div>
         );
