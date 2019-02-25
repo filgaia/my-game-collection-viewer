@@ -20,7 +20,7 @@ import gameCardStyles from './gameCardStyles';
 // @utilities
 import { tagCodeToColor } from '../../utilities/utilities';
 // @constants
-import { ERROR_IMAGE } from './../../constants/index';
+import { CARD_OPACITY, ERROR_IMAGE } from './../../constants/index';
 
 class GameCard extends Component {
     constructor(props) {
@@ -48,7 +48,7 @@ class GameCard extends Component {
 
         return labels.map(label => {
             return (
-                <Chip style={{ backgroundColor: tagCodeToColor(label.background_color) }}
+                <Chip style={{ backgroundColor: tagCodeToColor(label.background_color, CARD_OPACITY) }}
                     key={label.id}
                     label={label.name}
                 />
