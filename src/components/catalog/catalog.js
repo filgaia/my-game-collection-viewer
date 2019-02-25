@@ -33,10 +33,13 @@ class Catalog extends Component {
                 <Grid item key={get(card, 'id')} xs={12} sm={6} md={4} lg={3}>
                     <LazyLoad height={250}>
                         <GameCard
+                            idGame={get(card, 'id')}
                             description={get(card, 'description_short', '')}
                             title={get(card, 'name', '')}
                             image={get(card, 'image_url_medium', '')}
                             plataform={get(card, 'platform_id', 0)}
+                            labels={get(card, 'labels', [])}
+                            gamesInformation={gamesInformation}
                         />
                     </LazyLoad>
                 </Grid>

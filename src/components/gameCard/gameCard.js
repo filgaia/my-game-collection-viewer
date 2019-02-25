@@ -11,19 +11,24 @@ import {
     CardHeader,
     CardMedia,
     Typography,
-    Zoom
+    Zoom,
+    Chip
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 // @styles
 import gameCardStyles from './gameCardStyles';
+// @utilities
+import { tagCodeToColor } from '../../utilities/utilities';
 // @constants
-import { backup } from './../../data/db.json';
+import { ERROR_IMAGE } from './../../constants/index';
 
 class GameCard extends Component {
     constructor(props) {
         super(props);
 
         this.state = { imageSrc: props.image };
+
+        this.loadLabelTag = this.loadLabelTag.bind(this);
     }
 
     componentDidMount() {
@@ -32,16 +37,30 @@ class GameCard extends Component {
 
     checkImage(src) {
         var img = new Image();
-        const imageSrc = 'data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22288%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20288%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_164edaf95ee%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_164edaf95ee%22%3E%3Crect%20width%3D%22288%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2296.32500076293945%22%20y%3D%22118.8%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E'; // eslint-disable-line max-len
+        const imageSrc = ERROR_IMAGE;
 
         img.onerror = (e) => this.setState({ imageSrc });
         img.src = src;
     }
 
+    loadLabelTag() {
+        const { labels } = this.props;
+
+        return labels.map(label => {
+            return (
+                <Chip style={{ backgroundColor: tagCodeToColor(label.background_color) }}
+                    key={label.id}
+                    label={label.name}
+                />
+            );
+        });
+    }
+
     render() {
-        const { classes, description, title, plataform } = this.props;
+        const { classes, description, title, plataform, gamesInformation } = this.props;
         const { imageSrc } = this.state;
-        const plataformData = get(backup, 'Platform').find(item => item.id === plataform);
+        const plataformData = gamesInformation.get('platforms').find(item => item.id === plataform);
+        const labelsData = this.loadLabelTag();
 
         return (
             <Zoom in>
@@ -60,6 +79,7 @@ class GameCard extends Component {
                         </Typography>
                     </CardContent>
                     <CardActions>
+                        {labelsData}
                         <Button size="small" color="primary">
                             View
                         </Button>
@@ -71,11 +91,14 @@ class GameCard extends Component {
 }
 
 GameCard.propTypes = {
+    idGame: PropTypes.number.isRequired,
     classes: PropTypes.object.isRequired,
     description: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     plataform: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    labels: PropTypes.array.isRequired,
+    gamesInformation: PropTypes.object.isRequired
 };
 
 export default withStyles(gameCardStyles)(GameCard);

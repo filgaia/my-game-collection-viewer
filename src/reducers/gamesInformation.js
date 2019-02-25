@@ -10,6 +10,7 @@ const setInitialState = () => Immutable.fromJS({
     loading: true,
     source: [],
     games: [],
+    platforms: [],
     hasMoreItems: true
 });
 
@@ -18,7 +19,8 @@ const gameInformationReducer = handleActions(
         [actions.loadJsonInformation]: (state, action) =>
             state.merge({
                 loading: false,
-                source: get(action, 'payload.response.games', [])
+                source: get(action, 'payload.response.games', []),
+                platforms: get(action, 'payload.response.platforms', []),
             }),
         [actions.loadGamesInformation]: (state, action) =>
             state.merge({
