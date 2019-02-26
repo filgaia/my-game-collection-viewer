@@ -9,9 +9,12 @@ const setInitialState = () => Immutable.fromJS({
     asc: false,
     loading: true,
     source: [],
+    sourceWishList: [],
     games: [],
+    wishList: [],
     platforms: [],
-    hasMoreItems: true
+    hasMoreItems: true,
+    hasMoreItemsWishList: true
 });
 
 const gameInformationReducer = handleActions(
@@ -20,23 +23,26 @@ const gameInformationReducer = handleActions(
             state.merge({
                 loading: false,
                 source: get(action, 'payload.response.games', []),
+                sourceWishList: get(action, 'payload.response.gamesInWishList', []),
                 platforms: get(action, 'payload.response.platforms', []),
             }),
         [actions.loadGamesInformation]: (state, action) =>
             state.merge({
                 loading: false,
-                games: get(action, 'payload.response.games', []),
-                hasMoreItems: get(action, 'payload.response.hasMoreItems', false)
+                [get(action, 'payload.response.propGames')]: get(action, 'payload.response.games', []),
+                [get(action, 'payload.response.propMoreItems')]: get(action, 'payload.response.hasMoreItems', false)
             }),
-        [actions.shortGamesByName]: (state) =>
+        [actions.shortDataByName]: (state) =>
             state.merge({
                 loading: true
             }),
-        [actions.shortGamesByNameSuccess]: (state, action) =>
+        [actions.shortDataByNameSuccess]: (state, action) =>
             state.merge({
                 asc: !state.get('asc'),
                 source: get(action, 'payload.response.source', []),
+                sourceWishList: get(action, 'payload.response.sourceWishList', []),
                 games: [],
+                wishList: [],
                 loading: false
             })
     },
