@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // @components
-import Catalog from '../../components/catalog/catalog';
+import SwipeableView from '../../components/tabContainer/swipeableView';
 import Footer from '../../components/footer/footer';
 import Navigator from '../../components/navigator/navigator';
 // @actions
@@ -22,7 +22,7 @@ class App extends Component {
 
         return (
             <React.Fragment>
-                <Catalog
+                <SwipeableView
                     gamesInformation={gamesInformation}
                     initGames={initGames}
                     loadGames={loadGames}

@@ -20,13 +20,9 @@ import GameCard from './../gameCard/gameCard';
 import catalogStyles from './catalogStyles';
 
 class Catalog extends Component {
-    componentDidMount() {
-        this.props.initGames();
-    }
 
     buildItems() {
-        const { gamesInformation } = this.props;
-        const games = gamesInformation.get('games');
+        const { gamesInformation, games } = this.props;
 
         return (
             games.map(card => (
@@ -48,8 +44,7 @@ class Catalog extends Component {
     }
 
     buildCatalog(items, loader) {
-        const { classes, gamesInformation, loadGames } = this.props;
-        const hasMoreItems = gamesInformation.get('hasMoreItems');
+        const { classes, loadGames, hasMoreItems } = this.props;
 
         return (
             <main>
@@ -93,8 +88,9 @@ class Catalog extends Component {
 Catalog.propTypes = {
     classes: PropTypes.object.isRequired,
     gamesInformation: PropTypes.object.isRequired,
-    initGames: PropTypes.func.isRequired,
     loadGames: PropTypes.func.isRequired,
+    hasMoreItems: PropTypes.bool.isRequired,
+    games: PropTypes.object.isRequired
 };
 
 export default withStyles(catalogStyles)(Catalog);

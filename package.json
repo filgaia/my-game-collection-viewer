@@ -1,6 +1,6 @@
 {
     "name": "my-game-collection-viewer",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "private": true,
     "homepage": "https://filgaia.github.io/my-game-collection-viewer",
     "scripts": {
@@ -64,6 +64,7 @@
         "react-infinite-scroller": "^1.2.4",
         "react-lazyload": "^2.5.0",
         "react-redux": "^6.0.0",
+        "react-swipeable-views": "^0.13.1",
         "redux": "^4.0.1",
         "redux-actions": "^2.6.4",
         "redux-thunk": "^2.3.0",
