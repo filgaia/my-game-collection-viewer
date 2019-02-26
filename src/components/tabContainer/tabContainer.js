@@ -25,7 +25,7 @@ class TabContainer extends Component {
 
 TabContainer.propTypes = {
     classes: PropTypes.object.isRequired,
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
     dir: PropTypes.string.isRequired
 };
 

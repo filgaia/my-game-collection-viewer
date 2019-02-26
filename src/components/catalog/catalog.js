@@ -15,9 +15,11 @@ import { withStyles } from '@material-ui/core/styles';
 // @components
 import Title from './../title/title';
 import GameCard from './../gameCard/gameCard';
-
 // @styles
 import catalogStyles from './catalogStyles';
+// @constants
+// @constants
+import { FIRST_PAGE } from '../../constants/index';
 
 class Catalog extends Component {
 
@@ -26,7 +28,7 @@ class Catalog extends Component {
 
         return (
             games.map(card => (
-                <Grid item key={get(card, 'id')} xs={12} sm={6} md={4} lg={3}>
+                <Grid item key={`card-${get(card, 'id')}`} xs={12} sm={6} md={4} lg={3}>
                     <LazyLoad height={250}>
                         <GameCard
                             idGame={get(card, 'id')}
@@ -50,7 +52,7 @@ class Catalog extends Component {
             <main>
                 <Title />
                 <InfiniteScroll
-                    pageStart={0}
+                    pageStart={FIRST_PAGE}
                     loadMore={loadGames}
                     hasMore={hasMoreItems}
                     loader={loader}
@@ -90,7 +92,10 @@ Catalog.propTypes = {
     gamesInformation: PropTypes.object.isRequired,
     loadGames: PropTypes.func.isRequired,
     hasMoreItems: PropTypes.bool.isRequired,
-    games: PropTypes.object.isRequired
+    games: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.array
+    ]).isRequired
 };
 
 export default withStyles(catalogStyles)(Catalog);

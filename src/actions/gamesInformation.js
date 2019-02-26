@@ -5,12 +5,14 @@ import filter from 'lodash/filter';
 import find from 'lodash/find';
 // @constants
 import { backup } from './../data/db.json';
-import { ITEMS_BY_PAGE } from './../constants/index';
+import { ITEMS_BY_PAGE, CATALOG_TAB } from './../constants/index';
 
 const actions = createActions(
     'LOAD_JSON_INFORMATION',
     'LOAD_GAMES_INFORMATION',
     'LOAD_WISH_LIST_INFORMATION',
+
+    'SET_TAB',
 
     'SHORT_DATA_BY_NAME',
     'SHORT_DATA_BY_NAME_SUCCESS'
@@ -34,11 +36,11 @@ const initGames = () => (dispatch) => {
     dispatch(actions.loadJsonInformation({ response: { games, gamesInWishList, platforms } }));
 };
 
-const loadGames = (params) => (dispatch) => {
+const loadGames = (page, params) => (dispatch) => {
     const load = ITEMS_BY_PAGE;
-    const start = params.page * load;
-    const games = params.source.slice(0, start + load);
-    const hasMoreItems = games.length > params.source.length;
+    const start = page * load;
+    const games = params.source.slice(start, start + load);
+    const hasMoreItems = params.source.length > games.length;
     dispatch(actions.loadGamesInformation({
         response: {
             propGames: params.propGames,
@@ -65,13 +67,13 @@ const reverseList = (source, asc) => {
 
 const shortByName = () => (dispatch, getState) => {
     const gamesInformation = getState().gamesInformation;
-
-    const source = reverseList(gamesInformation.get('source').slice(0), gamesInformation.get('asc'));
-    const sourceWishList = reverseList(gamesInformation.get('sourceWishList').slice(0), gamesInformation.get('asc'));
+    const tab = gamesInformation.get('tab');
+    const data = tab === CATALOG_TAB ? 'source' : 'sourceWishList';
+    const source = reverseList(gamesInformation.get(data).slice(0), gamesInformation.get('asc'));
 
     dispatch(actions.shortDataByName());
     setTimeout(() => {
-        dispatch(actions.shortDataByNameSuccess({ response: { source, sourceWishList } }));
+        dispatch(actions.shortDataByNameSuccess({ response: { source } }));
     }, 500);
 };
 

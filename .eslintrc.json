@@ -21,6 +21,9 @@
         "react"
     ],
     "rules": {
+        "no-console": [
+            "warn"
+        ],
         "indent": [
             "error",
             4

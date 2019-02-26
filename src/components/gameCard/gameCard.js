@@ -49,7 +49,7 @@ class GameCard extends Component {
         return labels.map(label => {
             return (
                 <Chip style={{ backgroundColor: tagCodeToColor(label.background_color, CARD_OPACITY) }}
-                    key={label.id}
+                    key={`label-${label.id}`}
                     label={label.name}
                 />
             );

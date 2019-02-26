@@ -25,76 +25,66 @@ class SwipeableView extends Component {
 
     constructor(props) {
         super(props);
-
-        this.buildCatalogTab = this.buildCatalogTab.bind(this);
-        this.buildWishListTab = this.buildWishListTab.bind(this);
-
-        this.state = { value: CATALOG_TAB };
     }
 
     componentDidMount() {
         this.props.initGames();
     }
 
-    handleChange = (event, value) => {
-        this.setState({ value });
+    handleChange = (event, tab) => {
+        this.props.setTab({ tab });
     };
 
-    handleChangeIndex = index => {
-        this.setState({ value: index });
+    handleChangeIndex = tab => {
+        this.props.setTab({ tab });
     };
 
 
     buildCatalogTab() {
         const { gamesInformation, loadGames } = this.props;
-        return this.state.value === CATALOG_TAB ?
-            (
-                <Catalog
-                    gamesInformation={gamesInformation}
-                    loadGames={(page) => {
-                        const params = {
-                            page,
-                            source: gamesInformation.get('source'),
-                            propGames: 'games',
-                            propMoreItems: 'hasMoreItems'
-                        };
-                        loadGames(params);
-                    }}
-                    hasMoreItems={gamesInformation.get('hasMoreItems')}
-                    games={gamesInformation.get('games')}
-                />
-            )
-            :
-            null;
+        const tab = gamesInformation.get('tab');
+        const params = {
+            source: gamesInformation.get('source'),
+            propGames: 'games',
+            propMoreItems: 'hasMoreItems'
+        };
+
+        return tab === CATALOG_TAB ? (
+            <Catalog
+                gamesInformation={gamesInformation}
+                loadGames={(page) => {
+                    loadGames(page, params);
+                }}
+                hasMoreItems={gamesInformation.get('hasMoreItems')}
+                games={gamesInformation.get('games')}
+            />
+        ) : null;
     }
 
     buildWishListTab() {
         const { gamesInformation, loadGames } = this.props;
-        return this.state.value === WISHLIST_TAB ?
-            (
-                <Catalog
-                    gamesInformation={gamesInformation}
-                    loadGames={(page) => {
-                        const params = {
-                            page,
-                            source: gamesInformation.get('sourceWishList'),
-                            propGames: 'wishList',
-                            propMoreItems: 'hasMoreItemsWishList'
-                        };
-                        loadGames(params);
-                    }}
-                    hasMoreItems={gamesInformation.get('hasMoreItemsWishList')}
-                    games={gamesInformation.get('wishList')}
-                />
-            )
-            :
-            null;
+        const tab = gamesInformation.get('tab');
+        const params = {
+            source: gamesInformation.get('sourceWishList'),
+            propGames: 'wishList',
+            propMoreItems: 'hasMoreItemsWishList'
+        };
+
+        return tab === WISHLIST_TAB ? (
+            <Catalog
+                gamesInformation={gamesInformation}
+                loadGames={(page) => loadGames(page, params)}
+                hasMoreItems={gamesInformation.get('hasMoreItemsWishList')}
+                games={gamesInformation.get('wishList')}
+            />
+        ) : null;
     }
 
 
     render() {
 
-        const { classes, theme } = this.props;
+        const { classes, theme, gamesInformation } = this.props;
+        const tab = gamesInformation.get('tab');
         const catalog = this.buildCatalogTab();
         const wishList = this.buildWishListTab();
         const axis = theme.direction === 'rtl' ? 'x-reverse' : 'x';
@@ -103,7 +93,7 @@ class SwipeableView extends Component {
             <div className={classes.root}>
                 <AppBar position="static" color="default">
                     <Tabs
-                        value={this.state.value}
+                        value={tab}
                         onChange={this.handleChange}
                         indicatorColor="primary"
                         textColor="primary"
@@ -115,7 +105,7 @@ class SwipeableView extends Component {
                 </AppBar>
                 <SwipeableViews
                     axis={axis}
-                    index={this.state.value}
+                    index={tab}
                     onChangeIndex={this.handleChangeIndex}
                 >
                     <TabContainer dir={theme.direction}>
@@ -126,7 +116,6 @@ class SwipeableView extends Component {
                     </TabContainer>
                 </SwipeableViews>
             </div >
-
         );
     }
 }
@@ -136,6 +125,7 @@ SwipeableView.propTypes = {
     gamesInformation: PropTypes.object.isRequired,
     initGames: PropTypes.func.isRequired,
     loadGames: PropTypes.func.isRequired,
+    setTab: PropTypes.func.isRequired,
     theme: PropTypes.object.isRequired
 };
 
