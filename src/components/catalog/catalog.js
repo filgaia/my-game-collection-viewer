@@ -13,11 +13,9 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 // @components
-import Title from './../title/title';
 import GameCard from './../gameCard/gameCard';
 // @styles
 import catalogStyles from './catalogStyles';
-// @constants
 // @constants
 import { FIRST_PAGE } from '../../constants/index';
 
@@ -51,7 +49,6 @@ class Catalog extends Component {
 
         return (
             <main>
-                <Title />
                 <InfiniteScroll
                     pageStart={FIRST_PAGE}
                     loadMore={loadGames}
@@ -74,8 +71,8 @@ class Catalog extends Component {
         const loading = gamesInformation.get('loading');
 
         const loader = (
-            <div className={classes.loading}>
-                <CircularProgress key={0} />
+            <div key={0} className={classes.loading}>
+                <CircularProgress />
             </div>
         ); // Key to remove warning of infinite scroll
 

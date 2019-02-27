@@ -13,6 +13,7 @@ const setInitialState = () => Immutable.fromJS({
     hasMoreItems: true,
     hasMoreItemsWishList: true,
     idLabelFilter: null,
+    importDrawer: false,
     labels: [],
     loading: true,
     platforms: [],
@@ -82,6 +83,10 @@ const gameInformationReducer = handleActions(
                 games: state.get('source').slice(0, ITEMS_BY_PAGE),
                 sourceFiltered: [],
                 idLabelFilter: null
+            }),
+        [actions.toggleDrawer]: (state, action) =>
+            state.merge({
+                [get(action, 'payload.response.drawer')]: get(action, 'payload.response.open', false)
             })
     },
     setInitialState()

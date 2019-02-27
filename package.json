@@ -1,6 +1,6 @@
 {
     "name": "my-game-collection-viewer",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "private": true,
     "homepage": "https://filgaia.github.io/my-game-collection-viewer",
     "scripts": {
@@ -19,6 +19,9 @@
     ],
     "dependencies": {
         "@babel/core": "7.1.6",
+        "@fortawesome/fontawesome-svg-core": "^1.2.15",
+        "@fortawesome/free-solid-svg-icons": "^5.7.2",
+        "@fortawesome/react-fontawesome": "^0.1.4",
         "@material-ui/core": "^3.9.2",
         "@material-ui/icons": "^3.0.2",
         "@svgr/webpack": "2.4.1",
@@ -83,7 +86,6 @@
         "expect-immutable": "0.0.3",
         "gh-pages": "^1.2.0",
         "node-sass": "^4.11.0",
-        "react-hot-loader": "^4.7.0",
         "redux-immutable-state-invariant": "^2.1.0",
         "sass-lint": "^1.12.1",
         "sass-loader": "^7.1.0"

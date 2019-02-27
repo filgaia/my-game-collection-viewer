@@ -18,7 +18,9 @@ const actions = createActions(
     'SHORT_DATA_BY_NAME',
     'SHORT_DATA_BY_NAME_SUCCESS',
 
-    'RESET_FILTERED_VALUES'
+    'RESET_FILTERED_VALUES',
+
+    'TOGGLE_DRAWER'
 );
 
 const initGames = () => (dispatch) => {

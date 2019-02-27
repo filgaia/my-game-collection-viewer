@@ -3,19 +3,20 @@ import './App.scss';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+// @ffont awesome
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 // @components
 import SwipeableView from '../../components/tabContainer/swipeableView';
 import Footer from '../../components/footer/footer';
 import Navigator from '../../components/navigator/navigator';
 // @actions
 import { initGames, loadGames, setLabelFilter, shortByName, actions as gamesActions } from '../../actions/gamesInformation';
-import { actions as loginActions } from '../../actions/login';
 
 class App extends Component {
-
-    checkUserAuthenticated = () => {
-        return this.props.loginInformation.get('isAuthenticated');
-    };
+    componentDidMount() {
+        library.add(faSignInAlt, faSignOutAlt);
+    }
 
     buildCatalog() {
         const { gamesInformation, loadGames, initGames, setLabelFilter, setTab } = this.props;
@@ -34,14 +35,15 @@ class App extends Component {
     }
 
     render() {
-        const { shortByName, loginInformation, logoutSuccess } = this.props;
+        const { gamesInformation, shortByName, toggleDrawer } = this.props;
         const catalog = this.buildCatalog();
         return (
             <div className="app">
                 <Navigator
-                    loginInformation={loginInformation}
-                    logoutSuccess={logoutSuccess}
-                    shortByName={shortByName} />
+                    gamesInformation={gamesInformation}
+                    shortByName={shortByName}
+                    toggleDrawer={toggleDrawer}
+                />
                 {catalog}
                 <Footer />
             </div>
@@ -53,23 +55,21 @@ App.propTypes = {
     gamesInformation: PropTypes.object.isRequired,
     initGames: PropTypes.func.isRequired,
     loadGames: PropTypes.func.isRequired,
-    logoutSuccess: PropTypes.func.isRequired,
-    loginInformation: PropTypes.object.isRequired,
     setLabelFilter: PropTypes.func.isRequired,
     setTab: PropTypes.func.isRequired,
-    shortByName: PropTypes.func.isRequired
+    shortByName: PropTypes.func.isRequired,
+    toggleDrawer: PropTypes.func.isRequired
 };
 
 export default connect(
     state => ({
-        gamesInformation: state.gamesInformation,
-        loginInformation: state.login,
+        gamesInformation: state.gamesInformation
     }),
     {
         initGames: initGames,
         loadGames: loadGames,
-        logoutSuccess: loginActions.logoutSuccess,
         setLabelFilter: setLabelFilter,
         setTab: gamesActions.setTab,
-        shortByName: shortByName
+        shortByName: shortByName,
+        toggleDrawer: gamesActions.toggleDrawer
     })(App);

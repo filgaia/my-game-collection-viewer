@@ -1,12 +1,12 @@
 // @vendors
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { GoogleLogout } from 'react-google-login';
 // @material
 import {
     AppBar,
     IconButton,
     Toolbar,
+    Tooltip,
     Typography
 } from '@material-ui/core';
 // https://material.io/tools/icons/?style=baseline
@@ -15,36 +15,14 @@ import {
     SortByAlpha
 } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
+// @components
+import ImportDrawer from '../importDrawer/importDrawer';
 // @styles
 import navigatorStyles from './navigatorStyles';
-// @constants
-import { GOOGLE_CLIENT_ID } from '../../data/keys.json';
 
 class Navigator extends Component {
-
-    onLogoutSuccess = () => {
-        this.props.logoutSuccess();
-    }
-
-    buildLogoutButton() {
-        let logoutButton = null;
-        if (this.props.loginInformation.get('isAuthenticated')) {
-            logoutButton = (
-                <GoogleLogout
-                    clientId={GOOGLE_CLIENT_ID}
-                    buttonText="Logout"
-                    onLogoutSuccess={this.onLogoutSuccess}
-                >
-                </GoogleLogout>
-            );
-        }
-
-        return logoutButton;
-    }
-
     render() {
-        const { classes, shortByName } = this.props;
-        const logoutButton = this.buildLogoutButton();
+        const { gamesInformation, classes, shortByName, toggleDrawer } = this.props;
 
         return (
             <AppBar position="static" className={classes.appBar}>
@@ -53,10 +31,15 @@ class Navigator extends Component {
                     <Typography variant="h6" color="inherit" noWrap className={classes.grow}>
                         My Game Collection Viewer
                     </Typography>
-                    {logoutButton}
                     <IconButton color="inherit" onClick={shortByName}>
-                        <SortByAlpha />
+                        <Tooltip title="Order list" aria-label="Order list">
+                            <SortByAlpha />
+                        </Tooltip>
                     </IconButton>
+                    <ImportDrawer
+                        importDrawer={gamesInformation.get('importDrawer')}
+                        toggleDrawer={toggleDrawer}
+                    />
                 </Toolbar>
             </AppBar>
         );
@@ -65,9 +48,9 @@ class Navigator extends Component {
 
 Navigator.propTypes = {
     classes: PropTypes.object.isRequired,
-    loginInformation: PropTypes.object.isRequired,
-    logoutSuccess: PropTypes.func.isRequired,
-    shortByName: PropTypes.func.isRequired
+    gamesInformation: PropTypes.object.isRequired,
+    shortByName: PropTypes.func.isRequired,
+    toggleDrawer: PropTypes.func.isRequired
 };
 
 export default withStyles(navigatorStyles)(Navigator);

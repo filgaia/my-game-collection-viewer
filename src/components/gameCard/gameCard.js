@@ -80,10 +80,10 @@ class GameCard extends Component {
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        {labelsData}
                         <Button size="small" color="primary">
                             View
                         </Button>
+                        {labelsData}
                     </CardActions>
                 </Card>
             </Zoom>
