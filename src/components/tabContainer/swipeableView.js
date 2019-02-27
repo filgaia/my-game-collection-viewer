@@ -17,15 +17,12 @@ import {
 import swipeableViewStyles from './swipeableViewStyles';
 // @componets
 import TabContainer from './tabContainer';
-import Catalog from '../../components/catalog/catalog';
+import Catalog from '../catalog/catalog';
+import LabelTag from '../labelTag/labelTag';
 // @constants
 import { CATALOG_TAB, WISHLIST_TAB } from '../../constants/index';
 
 class SwipeableView extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         this.props.initGames();
@@ -41,10 +38,11 @@ class SwipeableView extends Component {
 
 
     buildCatalogTab() {
-        const { gamesInformation, loadGames } = this.props;
+        const { gamesInformation, loadGames, setLabelFilter } = this.props;
         const tab = gamesInformation.get('tab');
+        const source = gamesInformation.get('idLabelFilter') ? 'sourceFiltered' : 'source';
         const params = {
-            source: gamesInformation.get('source'),
+            source: gamesInformation.get(source),
             propGames: 'games',
             propMoreItems: 'hasMoreItems'
         };
@@ -57,12 +55,13 @@ class SwipeableView extends Component {
                 }}
                 hasMoreItems={gamesInformation.get('hasMoreItems')}
                 games={gamesInformation.get('games')}
+                setLabelFilter={setLabelFilter}
             />
         ) : null;
     }
 
     buildWishListTab() {
-        const { gamesInformation, loadGames } = this.props;
+        const { gamesInformation, loadGames, setLabelFilter } = this.props;
         const tab = gamesInformation.get('tab');
         const params = {
             source: gamesInformation.get('sourceWishList'),
@@ -76,16 +75,34 @@ class SwipeableView extends Component {
                 loadGames={(page) => loadGames(page, params)}
                 hasMoreItems={gamesInformation.get('hasMoreItemsWishList')}
                 games={gamesInformation.get('wishList')}
+                setLabelFilter={setLabelFilter}
             />
         ) : null;
+    }
+
+    buildLabelTagsFilter() {
+        const { gamesInformation, setLabelFilter } = this.props;
+        const labelsTags = gamesInformation.get('labels');
+        return (
+            labelsTags.map(labelTag => (
+                <LabelTag
+                    key={labelTag.id}
+                    label={labelTag}
+                    gamesInformation={gamesInformation}
+                    setLabelFilter={setLabelFilter}
+                />
+            ))
+        );
     }
 
 
     render() {
 
         const { classes, theme, gamesInformation } = this.props;
+
         const tab = gamesInformation.get('tab');
         const catalog = this.buildCatalogTab();
+        const labelsTagFilter = this.buildLabelTagsFilter();
         const wishList = this.buildWishListTab();
         const axis = theme.direction === 'rtl' ? 'x-reverse' : 'x';
 
@@ -109,6 +126,7 @@ class SwipeableView extends Component {
                     onChangeIndex={this.handleChangeIndex}
                 >
                     <TabContainer dir={theme.direction}>
+                        {labelsTagFilter}
                         {catalog}
                     </TabContainer>
                     <TabContainer dir={theme.direction}>
@@ -125,6 +143,7 @@ SwipeableView.propTypes = {
     gamesInformation: PropTypes.object.isRequired,
     initGames: PropTypes.func.isRequired,
     loadGames: PropTypes.func.isRequired,
+    setLabelFilter: PropTypes.func.isRequired,
     setTab: PropTypes.func.isRequired,
     theme: PropTypes.object.isRequired
 };

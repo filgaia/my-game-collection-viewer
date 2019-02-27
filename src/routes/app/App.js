@@ -8,7 +8,7 @@ import SwipeableView from '../../components/tabContainer/swipeableView';
 import Footer from '../../components/footer/footer';
 import Navigator from '../../components/navigator/navigator';
 // @actions
-import { initGames, loadGames, shortByName, actions as gamesActions } from '../../actions/gamesInformation';
+import { initGames, loadGames, setLabelFilter, shortByName, actions as gamesActions } from '../../actions/gamesInformation';
 import { actions as loginActions } from '../../actions/login';
 
 class App extends Component {
@@ -18,7 +18,7 @@ class App extends Component {
     };
 
     buildCatalog() {
-        const { gamesInformation, loadGames, initGames, setTab } = this.props;
+        const { gamesInformation, loadGames, initGames, setLabelFilter, setTab } = this.props;
 
         return (
             <React.Fragment>
@@ -26,6 +26,7 @@ class App extends Component {
                     gamesInformation={gamesInformation}
                     initGames={initGames}
                     loadGames={loadGames}
+                    setLabelFilter={setLabelFilter}
                     setTab={setTab}
                 />
             </React.Fragment>
@@ -54,6 +55,7 @@ App.propTypes = {
     loadGames: PropTypes.func.isRequired,
     logoutSuccess: PropTypes.func.isRequired,
     loginInformation: PropTypes.object.isRequired,
+    setLabelFilter: PropTypes.func.isRequired,
     setTab: PropTypes.func.isRequired,
     shortByName: PropTypes.func.isRequired
 };
@@ -67,6 +69,7 @@ export default connect(
         initGames: initGames,
         loadGames: loadGames,
         logoutSuccess: loginActions.logoutSuccess,
+        setLabelFilter: setLabelFilter,
         setTab: gamesActions.setTab,
         shortByName: shortByName
     })(App);

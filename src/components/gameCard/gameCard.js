@@ -12,15 +12,14 @@ import {
     CardMedia,
     Typography,
     Zoom,
-    Chip
+    withStyles
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+// @components
+import LabelTag from '../labelTag/labelTag';
 // @styles
 import gameCardStyles from './gameCardStyles';
-// @utilities
-import { tagCodeToColor } from '../../utilities/utilities';
 // @constants
-import { CARD_OPACITY, ERROR_IMAGE } from './../../constants/index';
+import { ERROR_IMAGE } from './../../constants/index';
 
 class GameCard extends Component {
     constructor(props) {
@@ -44,13 +43,15 @@ class GameCard extends Component {
     }
 
     loadLabelTag() {
-        const { labels } = this.props;
+        const { labels, gamesInformation, setLabelFilter } = this.props;
 
         return labels.map(label => {
             return (
-                <Chip style={{ backgroundColor: tagCodeToColor(label.background_color, CARD_OPACITY) }}
-                    key={`label-${label.id}`}
-                    label={label.name}
+                <LabelTag
+                    key={label.id}
+                    label={label}
+                    gamesInformation={gamesInformation}
+                    setLabelFilter={setLabelFilter}
                 />
             );
         });
@@ -98,7 +99,8 @@ GameCard.propTypes = {
     plataform: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     labels: PropTypes.array.isRequired,
-    gamesInformation: PropTypes.object.isRequired
+    gamesInformation: PropTypes.object.isRequired,
+    setLabelFilter: PropTypes.func.isRequired
 };
 
 export default withStyles(gameCardStyles)(GameCard);
