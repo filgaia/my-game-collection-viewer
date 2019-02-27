@@ -31,6 +31,9 @@ const catalogStyles = (theme) => ({
     cardContent: {
         flexGrow: 1,
     },
+    loading: {
+        marginTop: '10px'
+    },
     footer: {
         backgroundColor: theme.palette.background.paper,
         padding: theme.spacing.unit * 6,

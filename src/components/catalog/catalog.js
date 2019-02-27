@@ -24,7 +24,7 @@ import { FIRST_PAGE } from '../../constants/index';
 class Catalog extends Component {
 
     buildItems() {
-        const { gamesInformation, games } = this.props;
+        const { gamesInformation, games, setLabelFilter } = this.props;
 
         return (
             games.map(card => (
@@ -38,6 +38,7 @@ class Catalog extends Component {
                             plataform={get(card, 'platform_id', 0)}
                             labels={get(card, 'labels', [])}
                             gamesInformation={gamesInformation}
+                            setLabelFilter={setLabelFilter}
                         />
                     </LazyLoad>
                 </Grid>
@@ -68,11 +69,15 @@ class Catalog extends Component {
     }
 
     render() {
-        const { gamesInformation } = this.props;
+        const { classes, gamesInformation } = this.props;
 
         const loading = gamesInformation.get('loading');
 
-        const loader = <CircularProgress key={0} />; // Key to remove warning of infinite scroll
+        const loader = (
+            <div className={classes.loading}>
+                <CircularProgress key={0} />
+            </div>
+        ); // Key to remove warning of infinite scroll
 
         const items = this.buildItems();
 
@@ -95,7 +100,8 @@ Catalog.propTypes = {
     games: PropTypes.oneOfType([
         PropTypes.object,
         PropTypes.array
-    ]).isRequired
+    ]).isRequired,
+    setLabelFilter: PropTypes.func.isRequired
 };
 
 export default withStyles(catalogStyles)(Catalog);

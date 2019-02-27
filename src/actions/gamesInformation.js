@@ -12,10 +12,13 @@ const actions = createActions(
     'LOAD_GAMES_INFORMATION',
     'LOAD_WISH_LIST_INFORMATION',
 
+    'SET_INFORMATION_FILTER',
     'SET_TAB',
 
     'SHORT_DATA_BY_NAME',
-    'SHORT_DATA_BY_NAME_SUCCESS'
+    'SHORT_DATA_BY_NAME_SUCCESS',
+
+    'RESET_FILTERED_VALUES'
 );
 
 const initGames = () => (dispatch) => {
@@ -33,20 +36,27 @@ const initGames = () => (dispatch) => {
     const games = filter(gamesWithLabels, game => !game.is_wishlist_item);
     const gamesInWishList = filter(gamesWithLabels, game => game.is_wishlist_item);
 
-    dispatch(actions.loadJsonInformation({ response: { games, gamesInWishList, platforms } }));
+    dispatch(actions.loadJsonInformation({ response: { games, gamesInWishList, labels, platforms } }));
+};
+
+const getListByPage = (page, source) => {
+    const load = ITEMS_BY_PAGE;
+    const start = page * load;
+    const games = source.slice(start, start + load);
+    const hasMoreItems = source.length > games.length;
+    return {
+        games,
+        hasMoreItems
+    };
 };
 
 const loadGames = (page, params) => (dispatch) => {
-    const load = ITEMS_BY_PAGE;
-    const start = page * load;
-    const games = params.source.slice(start, start + load);
-    const hasMoreItems = params.source.length > games.length;
+    const listGames = getListByPage(page, params.source);
     dispatch(actions.loadGamesInformation({
         response: {
             propGames: params.propGames,
-            games,
             propMoreItems: params.propMoreItems,
-            hasMoreItems
+            ...listGames
         }
     }));
 };
@@ -65,10 +75,38 @@ const reverseList = (source, asc) => {
     return source;
 };
 
+const setLabelFilter = (idLabelFilter) => (dispatch, getState) => {
+    if (idLabelFilter) {
+
+        const gamesInformation = getState().gamesInformation;
+        const sourceFiltered = filter(gamesInformation.get('source'), game => {
+            const label = find(game.labels, label => label.id === idLabelFilter);
+            return !!label;
+        });
+        const page = 0;
+        const listGames = getListByPage(page, sourceFiltered);
+        dispatch(actions.setInformationFilter({
+            response: {
+                idLabelFilter,
+                sourceFiltered,
+                ...listGames
+            }
+        }));
+    } else {
+        dispatch(actions.resetFilteredValues());
+    }
+};
+
 const shortByName = () => (dispatch, getState) => {
     const gamesInformation = getState().gamesInformation;
     const tab = gamesInformation.get('tab');
-    const data = tab === CATALOG_TAB ? 'source' : 'sourceWishList';
+    const idLabelFilter = gamesInformation.get('idLabelFilter');
+    let data = 'source';
+    if (tab !== CATALOG_TAB) {
+        data = 'sourceWishList';
+    } else if (idLabelFilter) {
+        data = 'sourceFiltered';
+    }
     const source = reverseList(gamesInformation.get(data).slice(0), gamesInformation.get('asc'));
 
     dispatch(actions.shortDataByName());
@@ -81,5 +119,6 @@ export {
     actions,
     initGames,
     loadGames,
+    setLabelFilter,
     shortByName
 };
