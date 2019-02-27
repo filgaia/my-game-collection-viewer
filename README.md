@@ -51,30 +51,23 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-#### Code Splitting
+### Moved Documentation
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-#### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-#### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-#### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-#### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+- [Code Splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- [Analyzing the Bundle Size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- [Making a Progressive Web App](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- [Advanced Configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- [Deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- [`npm run build` fails to minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 #### Clean cache for deployment
 
 `rm -rf node_modules/gh-pages/.cache`
 
-#### `npm run build` fails to minify
+## Links of interest
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- [Material UI](https://material-ui.com/)
+- [Material Design: Icons](https://material.io/tools/icons/)
+- [React Font Awesome 5](https://github.com/FortAwesome/react-fontawesome)
+- [Font Awesome Icons](https://fontawesome.com/icons?d=gallery&m=free)
+- [Font Awesome Sizing Icons](https://fontawesome.com/how-to-use/on-the-web/styling/sizing-icons)
