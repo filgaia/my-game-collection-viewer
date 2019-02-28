@@ -1,4 +1,5 @@
 import './index.scss';
+import './rhlConfig';
 
 //@vendors
 import React from 'react';

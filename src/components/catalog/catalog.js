@@ -9,7 +9,8 @@ import InfiniteScroll from 'react-infinite-scroller';
 import {
     CircularProgress,
     CssBaseline,
-    Grid
+    Grid,
+    Typography
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 // @components
@@ -65,20 +66,41 @@ class Catalog extends Component {
         );
     }
 
-    render() {
-        const { classes, gamesInformation } = this.props;
+    buildLoader() {
+        const { classes } = this.props;
 
-        const loading = gamesInformation.get('loading');
-
-        const loader = (
+        return (
             <div key={0} className={classes.loading}>
                 <CircularProgress />
             </div>
         ); // Key to remove warning of infinite scroll
+    }
 
+    buildError() {
+        return (
+            <Typography variant="h2" align="center" color="error" gutterBottom>
+                There was an error loading your file.
+            </Typography>
+        );
+    }
+
+    render() {
+        const { gamesInformation } = this.props;
+        const loading = gamesInformation.get('loading');
+        const error = gamesInformation.get('error');
+        let catalogContainer = null;
+
+        const loader = this.buildLoader();
         const items = this.buildItems();
+        const errorMessage = this.buildError();
 
-        const catalogContainer = loading ? loader : this.buildCatalog(items, loader);
+        if (error) {
+            catalogContainer = errorMessage;
+        } else if (loading) {
+            catalogContainer = loader;
+        } else {
+            catalogContainer = this.buildCatalog(items, loader);
+        }
 
         return (
             <React.Fragment>

@@ -1,6 +1,7 @@
 // @vendors
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import get from 'lodash/get';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // @material
 import {
@@ -27,7 +28,12 @@ class ImportDrawer extends Component {
     constructor(props) {
         super(props);
 
+        this.onImportFile = this.onImportFile.bind(this);
         this.onToggleDrawer = this.onToggleDrawer.bind(this);
+    }
+
+    onImportFile(event) {
+        this.props.importFile(get(event, 'target.files.0'));
     }
 
     onToggleDrawer(open) {
@@ -43,7 +49,6 @@ class ImportDrawer extends Component {
         const { classes } = this.props;
         const logoutButton = this.buildLogoutButton();
         const options = [
-            { icon: 'file-import', title: 'From file' },
             { icon: ['fab', 'playstation'], title: 'Coming Soon...' },
             { icon: ['fab', 'xbox'], title: 'Coming Soon...' }
         ];
@@ -61,12 +66,22 @@ class ImportDrawer extends Component {
         return (
             <div>
                 <List>
+                    <ListItem button key="import-file">
+                        <input accept=".c, application/x-zip-compressed" className={classes.input} id="import-file" type="file" onChange={this.onImportFile} />
+                        <label htmlFor="import-file" className={classes.labelFor}>
+                            <ListItemIcon className={classes.listItem}>
+                                <Tooltip title="From file" aria-label="From file">
+                                    <FontAwesomeIcon icon="file-import" size="lg" />
+                                </Tooltip>
+                            </ListItemIcon>
+                        </label>
+                    </ListItem>
                     <ListItem button key="import-drive">
                         {logoutButton}
                     </ListItem>
                     {items}
                 </List>
-            </div>
+            </div >
         );
     }
 
@@ -77,19 +92,12 @@ class ImportDrawer extends Component {
         return (
             <React.Fragment>
                 <IconButton color="inherit" onClick={() => this.onToggleDrawer(true)}>
-                    <Tooltip title="Import..." aria-label="Import...">
+                    <Tooltip title="Add Games..." aria-label="Add Games...">
                         <CloudDownload />
                     </Tooltip>
                 </IconButton>
                 <Drawer anchor="right" open={importDrawer} onClose={() => this.onToggleDrawer(false)}>
-                    <div
-                        tabIndex={0}
-                        role="button"
-                        onClick={() => this.onToggleDrawer(false)}
-                        onKeyDown={() => this.onToggleDrawer(false)}
-                    >
-                        {items}
-                    </div>
+                    {items}
                 </Drawer>
             </React.Fragment>
         );
@@ -99,6 +107,7 @@ class ImportDrawer extends Component {
 ImportDrawer.propTypes = {
     classes: PropTypes.object.isRequired,
     importDrawer: PropTypes.bool.isRequired,
+    importFile: PropTypes.func.isRequired,
     toggleDrawer: PropTypes.func.isRequired
 };
 

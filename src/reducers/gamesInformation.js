@@ -1,6 +1,6 @@
 //@vendor
 import Immutable from 'immutable';
-import { handleActions } from 'redux-actions';
+import { handleActions, combineActions } from 'redux-actions';
 import get from 'lodash/get';
 //@actions
 import { actions } from '../actions/gamesInformation';
@@ -62,18 +62,19 @@ const gameInformationReducer = handleActions(
                 [get(action, 'payload.response.propGames')]: get(action, 'payload.response.games', []),
                 [get(action, 'payload.response.propMoreItems')]: get(action, 'payload.response.hasMoreItems', false)
             }),
-        [actions.shortDataByName]: (state) =>
+        [combineActions(actions.shortDataByName, actions.setInformationFilter)]: (state) =>
             state.merge({
                 loading: true
             }),
         [actions.shortDataByNameSuccess]: (state, action) =>
             shortDataByName(state, action),
-        [actions.setInformationFilter]: (state, action) =>
+        [actions.setInformationFilterSuccess]: (state, action) =>
             state.merge({
-                games: get(action, 'payload.response.games', []),
+                games: [],
                 sourceFiltered: get(action, 'payload.response.sourceFiltered', []),
                 idLabelFilter: get(action, 'payload.response.idLabelFilter', null),
-                hasMoreItems: get(action, 'payload.response.hasMoreItems', null)
+                loading: false,
+                hasMoreItems: true
             }),
         [actions.setTab]: (state, action) =>
             state.merge({
@@ -88,6 +89,19 @@ const gameInformationReducer = handleActions(
         [actions.toggleDrawer]: (state, action) =>
             state.merge({
                 [get(action, 'payload.response.drawer')]: get(action, 'payload.response.open', false)
+            }),
+        [actions.importFile]: (state) =>
+            state.merge({
+                games: [],
+                wishList: [],
+                importDrawer: false,
+                error: false,
+                loading: true
+            }),
+        [actions.importFileError]: (state) =>
+            state.merge({
+                error: true,
+                importDrawer: false
             })
     },
     setInitialState()

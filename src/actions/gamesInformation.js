@@ -1,16 +1,23 @@
 //@vendor
 import { createActions } from 'redux-actions';
+import JSZip from 'jszip';
 import get from 'lodash/get';
+// @helpers
+import { getSource } from './../utilities/index';
 // @constants
 import { backup } from './../data/db.json';
-import { ITEMS_BY_PAGE, CATALOG_TAB } from './../constants/index';
+import { ITEMS_BY_PAGE } from './../constants/index';
 
 const actions = createActions(
+    'IMPORT_FILE',
+    'IMPORT_FILE_ERROR',
+
     'LOAD_JSON_INFORMATION',
     'LOAD_GAMES_INFORMATION',
     'LOAD_WISH_LIST_INFORMATION',
 
     'SET_INFORMATION_FILTER',
+    'SET_INFORMATION_FILTER_SUCCESS',
     'SET_TAB',
 
     'SHORT_DATA_BY_NAME',
@@ -21,11 +28,34 @@ const actions = createActions(
     'TOGGLE_DRAWER'
 );
 
-const initGames = () => (dispatch) => {
-    const allGames = get(backup, 'Game', []).slice(0);
-    const gamesLabels = get(backup, 'GameLabel', []).slice(0);
-    const labels = get(backup, 'Label', []).slice(0);
-    const platforms = get(backup, 'Platform', []).slice(0);
+const importFile = (file) => (dispatch) => {
+    const zip = new JSZip();
+    const fullname = get(file, 'name', '').split('.');
+    let name = null;
+
+    if (fullname.length > 0) {
+        name = fullname[0];
+    }
+
+    if (name) {
+        zip.loadAsync(file).then(() => {
+            zip.file(name).async('string').then(data => {
+                const json = JSON.parse(data);
+                dispatch(actions.importFile());
+                dispatch(initGames(get(json, 'backup')));
+            });
+        }).catch(e => {
+            dispatch(actions.importFileError({ error: get(e, 'Error', '') }));
+        });
+    }
+};
+
+const initGames = (source) => (dispatch) => {
+    const json = source || backup;
+    const allGames = get(json, 'Game', []).slice(0);
+    const gamesLabels = get(json, 'GameLabel', []).slice(0);
+    const labels = get(json, 'Label', []).slice(0);
+    const platforms = get(json, 'Platform', []).slice(0);
 
     const gamesWithLabels = allGames.map(game => {
         const gameLabels = gamesLabels.filter(gameLabel => gameLabel.game_id === game.id);
@@ -44,15 +74,16 @@ const getListByPage = (page, source) => {
     const load = ITEMS_BY_PAGE;
     const start = page * load;
     const games = source.slice(start, start + load);
-    const hasMoreItems = source.length > games.length;
+    const hasMoreItems = source.length > (start + games.length);
     return {
         games,
         hasMoreItems
     };
 };
 
-const loadGames = (page, params) => (dispatch) => {
+const loadGames = (page, params) => (dispatch, getState) => {
     const listGames = getListByPage(page, params.source);
+
     dispatch(actions.loadGamesInformation({
         response: {
             propGames: params.propGames,
@@ -78,7 +109,6 @@ const reverseList = (source, asc) => {
 
 const setLabelFilter = (idLabelFilter) => (dispatch, getState) => {
     if (idLabelFilter) {
-
         const source = getState().gamesInformation.get('source');
         const sourceFiltered = source.filter(game => {
             const label = game.labels.find(label => label.id === idLabelFilter);
@@ -86,13 +116,16 @@ const setLabelFilter = (idLabelFilter) => (dispatch, getState) => {
         });
         const page = 0;
         const listGames = getListByPage(page, sourceFiltered);
-        dispatch(actions.setInformationFilter({
-            response: {
-                idLabelFilter,
-                sourceFiltered,
-                ...listGames
-            }
-        }));
+        dispatch(actions.setInformationFilter());
+        setTimeout(() => {
+            dispatch(actions.setInformationFilterSuccess({
+                response: {
+                    idLabelFilter,
+                    sourceFiltered,
+                    ...listGames
+                }
+            }));
+        }, 500);
     } else {
         dispatch(actions.resetFilteredValues());
     }
@@ -102,12 +135,7 @@ const shortByName = () => (dispatch, getState) => {
     const gamesInformation = getState().gamesInformation;
     const tab = gamesInformation.get('tab');
     const idLabelFilter = gamesInformation.get('idLabelFilter');
-    let data = 'source';
-    if (tab !== CATALOG_TAB) {
-        data = 'sourceWishList';
-    } else if (idLabelFilter) {
-        data = 'sourceFiltered';
-    }
+    let data = getSource(tab, idLabelFilter);
     const source = reverseList(gamesInformation.get(data).slice(0), gamesInformation.get('asc'));
 
     dispatch(actions.shortDataByName());
@@ -118,6 +146,7 @@ const shortByName = () => (dispatch, getState) => {
 
 export {
     actions,
+    importFile,
     initGames,
     loadGames,
     setLabelFilter,

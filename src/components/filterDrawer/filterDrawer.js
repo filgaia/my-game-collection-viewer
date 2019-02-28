@@ -44,6 +44,7 @@ class FilterDrawer extends Component {
                     <Tooltip title={item.name} aria-label={item.name}>
                         <LabelTag
                             key={item.id}
+                            isDrawer
                             label={item}
                             gamesInformation={gamesInformation}
                             setLabelFilter={setLabelFilter}

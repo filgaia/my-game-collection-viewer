@@ -49,9 +49,7 @@ class SwipeableView extends Component {
         return tab === CATALOG_TAB ? (
             <Catalog
                 gamesInformation={gamesInformation}
-                loadGames={(page) => {
-                    loadGames(page, params);
-                }}
+                loadGames={(page) => loadGames(page, params)}
                 hasMoreItems={gamesInformation.get('hasMoreItems')}
                 games={gamesInformation.get('games')}
                 setLabelFilter={setLabelFilter}

@@ -78,12 +78,15 @@ class GameCard extends Component {
                         <Typography noWrap>
                             {description}
                         </Typography>
+
                     </CardContent>
-                    <CardActions>
+                    <CardActions className={classes.cardActions}>
+                        <div className={classes.labels}>
+                            {labelsData}
+                        </div>
                         <Button size="small" color="primary">
                             View
                         </Button>
-                        {labelsData}
                     </CardActions>
                 </Card>
             </Zoom>

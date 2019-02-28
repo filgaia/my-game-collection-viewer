@@ -1,6 +1,7 @@
 const filterDrawerStyles = (theme) => ({
     listItem: {
-        marginRight: 0
+        marginRight: 0,
+        width: '100%'
     }
 });
 

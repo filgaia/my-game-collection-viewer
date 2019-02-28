@@ -11,7 +11,7 @@ import SwipeableView from '../../components/tabContainer/swipeableView';
 import Footer from '../../components/footer/footer';
 import Navigator from '../../components/navigator/navigator';
 // @actions
-import { initGames, loadGames, setLabelFilter, shortByName, actions as gamesActions } from '../../actions/gamesInformation';
+import { importFile, initGames, loadGames, setLabelFilter, shortByName, actions as gamesActions } from '../../actions/gamesInformation';
 
 class Home extends Component {
     componentDidMount() {
@@ -35,12 +35,14 @@ class Home extends Component {
     }
 
     render() {
-        const { gamesInformation, setLabelFilter, shortByName, toggleDrawer } = this.props;
+        const { gamesInformation, importFile, setLabelFilter, shortByName, toggleDrawer } = this.props;
+
         const catalog = this.buildCatalog();
         return (
             <React.Fragment>
                 <Navigator
                     gamesInformation={gamesInformation}
+                    importFile={importFile}
                     setLabelFilter={setLabelFilter}
                     shortByName={shortByName}
                     toggleDrawer={toggleDrawer}
@@ -54,6 +56,7 @@ class Home extends Component {
 
 Home.propTypes = {
     gamesInformation: PropTypes.object.isRequired,
+    importFile: PropTypes.func.isRequired,
     initGames: PropTypes.func.isRequired,
     loadGames: PropTypes.func.isRequired,
     setLabelFilter: PropTypes.func.isRequired,
@@ -67,6 +70,7 @@ export default connect(
         gamesInformation: state.gamesInformation
     }),
     {
+        importFile: importFile,
         initGames: initGames,
         loadGames: loadGames,
         setLabelFilter: setLabelFilter,

@@ -10,7 +10,7 @@ import {
 // @styles
 import labelTagStyles from './labelTagStyles';
 // @utilities
-import { tagCodeToColor } from '../../utilities/utilities';
+import { tagCodeToColor } from '../../utilities/index';
 // @constants
 import { CARD_OPACITY } from './../../constants/index';
 
@@ -32,7 +32,7 @@ class LabelTag extends Component {
     }
 
     render() {
-        const { classes, label, gamesInformation } = this.props;
+        const { classes, isDrawer, label, gamesInformation } = this.props;
 
         const labelSeleted = gamesInformation.get('idLabelFilter') === label.id;
         const opacity = labelSeleted ? 1 : CARD_OPACITY;
@@ -40,7 +40,10 @@ class LabelTag extends Component {
 
         const classTag = classNames(
             classes.chip,
-            { [classes.seletedChip]: labelSeleted }
+            {
+                [classes.seletedChip]: labelSeleted,
+                [classes.drawerChip]: isDrawer
+            }
         );
 
         return (
@@ -58,6 +61,7 @@ class LabelTag extends Component {
 LabelTag.propTypes = {
     classes: PropTypes.object.isRequired,
     gamesInformation: PropTypes.object.isRequired,
+    isDrawer: PropTypes.bool,
     label: PropTypes.object.isRequired,
     setLabelFilter: PropTypes.func.isRequired
 };

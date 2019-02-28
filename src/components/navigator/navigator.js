@@ -23,7 +23,7 @@ import navigatorStyles from './navigatorStyles';
 
 class Navigator extends Component {
     render() {
-        const { classes, gamesInformation, setLabelFilter, shortByName, toggleDrawer } = this.props;
+        const { classes, importFile, gamesInformation, setLabelFilter, shortByName, toggleDrawer } = this.props;
 
         return (
             <AppBar position="static" className={classes.appBar}>
@@ -37,14 +37,15 @@ class Navigator extends Component {
                             <SortByAlpha />
                         </Tooltip>
                     </IconButton>
-                    <ImportDrawer
-                        importDrawer={gamesInformation.get('importDrawer')}
-                        toggleDrawer={toggleDrawer}
-                    />
                     <FilterDrawer
                         filterDrawer={gamesInformation.get('filterDrawer')}
                         gamesInformation={gamesInformation}
                         setLabelFilter={setLabelFilter}
+                        toggleDrawer={toggleDrawer}
+                    />
+                    <ImportDrawer
+                        importDrawer={gamesInformation.get('importDrawer')}
+                        importFile={importFile}
                         toggleDrawer={toggleDrawer}
                     />
                 </Toolbar>
@@ -56,6 +57,7 @@ class Navigator extends Component {
 Navigator.propTypes = {
     classes: PropTypes.object.isRequired,
     gamesInformation: PropTypes.object.isRequired,
+    importFile: PropTypes.func.isRequired,
     setLabelFilter: PropTypes.func.isRequired,
     shortByName: PropTypes.func.isRequired,
     toggleDrawer: PropTypes.func.isRequired

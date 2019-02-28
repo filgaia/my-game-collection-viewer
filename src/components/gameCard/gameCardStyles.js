@@ -9,6 +9,14 @@ const gameCardStyles = (theme) => ({
     },
     cardContent: {
         flexGrow: 1,
+    },
+    cardActions: {
+        flexWrap: 'wrap'
+    },
+    labels: {
+        marginBottom: '15px',
+        textAlign: 'left',
+        width: '100%'
     }
 });
 
