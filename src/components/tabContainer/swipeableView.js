@@ -18,7 +18,6 @@ import swipeableViewStyles from './swipeableViewStyles';
 // @componets
 import TabContainer from './tabContainer';
 import Catalog from '../catalog/catalog';
-import LabelTag from '../labelTag/labelTag';
 // @constants
 import { CATALOG_TAB, WISHLIST_TAB } from '../../constants/index';
 
@@ -80,21 +79,6 @@ class SwipeableView extends Component {
         ) : null;
     }
 
-    buildLabelTagsFilter() {
-        const { gamesInformation, setLabelFilter } = this.props;
-        const labelsTags = gamesInformation.get('labels');
-        return (
-            labelsTags.map(labelTag => (
-                <LabelTag
-                    key={labelTag.id}
-                    label={labelTag}
-                    gamesInformation={gamesInformation}
-                    setLabelFilter={setLabelFilter}
-                />
-            ))
-        );
-    }
-
 
     render() {
 
@@ -102,7 +86,6 @@ class SwipeableView extends Component {
 
         const tab = gamesInformation.get('tab');
         const catalog = this.buildCatalogTab();
-        const labelsTagFilter = this.buildLabelTagsFilter();
         const wishList = this.buildWishListTab();
         const axis = theme.direction === 'rtl' ? 'x-reverse' : 'x';
 
@@ -126,7 +109,6 @@ class SwipeableView extends Component {
                     onChangeIndex={this.handleChangeIndex}
                 >
                     <TabContainer dir={theme.direction}>
-                        {labelsTagFilter}
                         {catalog}
                     </TabContainer>
                     <TabContainer dir={theme.direction}>

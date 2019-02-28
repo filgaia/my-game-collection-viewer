@@ -35,12 +35,13 @@ class Home extends Component {
     }
 
     render() {
-        const { gamesInformation, shortByName, toggleDrawer } = this.props;
+        const { gamesInformation, setLabelFilter, shortByName, toggleDrawer } = this.props;
         const catalog = this.buildCatalog();
         return (
             <React.Fragment>
                 <Navigator
                     gamesInformation={gamesInformation}
+                    setLabelFilter={setLabelFilter}
                     shortByName={shortByName}
                     toggleDrawer={toggleDrawer}
                 />
