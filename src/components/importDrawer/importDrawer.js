@@ -1,6 +1,7 @@
 // @vendors
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // @material
 import {
     Drawer,
@@ -12,8 +13,7 @@ import {
 } from '@material-ui/core';
 // https://material.io/tools/icons/?style=baseline
 import {
-    CloudDownload,
-    FileCopy
+    CloudDownload
 } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 // @styles
@@ -42,22 +42,29 @@ class ImportDrawer extends Component {
     buildItems() {
         const { classes } = this.props;
         const logoutButton = this.buildLogoutButton();
+        const options = [
+            { icon: 'file-import', title: 'From file' },
+            { icon: ['fab', 'playstation'], title: 'Coming Soon...' },
+            { icon: ['fab', 'xbox'], title: 'Coming Soon...' }
+        ];
+
+        const items = options.map((item, index) => (
+            <ListItem button key={`ìmport-${index}`}>
+                <ListItemIcon className={classes.listItem}>
+                    <Tooltip title={item.title} aria-label={item.title}>
+                        <FontAwesomeIcon icon={item.icon} size="lg" />
+                    </Tooltip>
+                </ListItemIcon>
+            </ListItem>
+        ));
 
         return (
             <div>
                 <List>
-                    <ListItem button key="import-file">
-                        <ListItemIcon className={classes.listItem}>
-                            <Tooltip title="As file" aria-label="As file">
-                                <FileCopy />
-                            </Tooltip>
-                        </ListItemIcon>
-                    </ListItem>
-                </List>
-                <List>
                     <ListItem button key="import-drive">
                         {logoutButton}
                     </ListItem>
+                    {items}
                 </List>
             </div>
         );

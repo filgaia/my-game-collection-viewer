@@ -35,8 +35,8 @@ class LabelTag extends Component {
         const { classes, label, gamesInformation } = this.props;
 
         const labelSeleted = gamesInformation.get('idLabelFilter') === label.id;
-        const tagColor = labelSeleted ?
-            tagCodeToColor(label.background_color) : tagCodeToColor(label.background_color, CARD_OPACITY);
+        const opacity = labelSeleted ? 1 : CARD_OPACITY;
+        const tagColor = tagCodeToColor(label.background_color, opacity);
 
         const classTag = classNames(
             classes.chip,

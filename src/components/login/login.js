@@ -38,28 +38,24 @@ class Login extends Component {
         this.props.loginFailure({ error: response.error });
     };
 
-    buildLoginIcon(renderProps) {
+    buildIcon(icon, title, onClick) {
         const { classes } = this.props;
 
         return (
-            <ListItemIcon className={classes.listItem} onClick={renderProps.onClick}>
-                <Tooltip title="From Google Drive" aria-label="From Google Drive">
-                    <FontAwesomeIcon icon="sign-in-alt" size="lg" />
+            <ListItemIcon className={classes.listItem} onClick={onClick}>
+                <Tooltip title={title} aria-label={title}>
+                    <FontAwesomeIcon icon={icon} size="lg" />
                 </Tooltip>
             </ListItemIcon>
         );
     }
 
-    buildLogoutIcon(renderProps) {
-        const { classes } = this.props;
+    buildLoginIcon(renderProps) {
+        return this.buildIcon('sign-in-alt', 'Login', renderProps.onClick);
+    }
 
-        return (
-            <ListItemIcon className={classes.listItem} onClick={renderProps.onClick}>
-                <Tooltip title="Logout" aria-label="Logout">
-                    <FontAwesomeIcon icon="sign-out-alt" />
-                </Tooltip>
-            </ListItemIcon>
-        );
+    buildLogoutIcon(renderProps) {
+        return this.buildIcon('sign-out-alt', 'Logout', renderProps.onClick);
     }
 
     render() {
@@ -68,7 +64,6 @@ class Login extends Component {
         return this.checkUserAuthenticated() ? (
             <GoogleLogout
                 clientId={GOOGLE_CLIENT_ID}
-                buttonText="Logout"
                 onLogoutSuccess={logoutSuccess}
                 render={this.buildLogoutIcon}
             />
@@ -76,7 +71,6 @@ class Login extends Component {
             (
                 <GoogleLogin
                     clientId={GOOGLE_CLIENT_ID}
-                    buttonText="Login"
                     onSuccess={this.handleLoginSuccess}
                     onFailure={this.handleLoginFailure}
                     render={this.buildLoginIcon}

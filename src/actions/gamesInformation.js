@@ -1,8 +1,6 @@
 //@vendor
 import { createActions } from 'redux-actions';
 import get from 'lodash/get';
-import filter from 'lodash/filter';
-import find from 'lodash/find';
 // @constants
 import { backup } from './../data/db.json';
 import { ITEMS_BY_PAGE, CATALOG_TAB } from './../constants/index';
@@ -25,18 +23,19 @@ const actions = createActions(
 
 const initGames = () => (dispatch) => {
     const allGames = get(backup, 'Game', []).slice(0);
-    const gamesLabels = get(backup, 'GameLabel', []);
-    const labels = get(backup, 'Label', []);
-    const platforms = get(backup, 'Platform', []);
+    const gamesLabels = get(backup, 'GameLabel', []).slice(0);
+    const labels = get(backup, 'Label', []).slice(0);
+    const platforms = get(backup, 'Platform', []).slice(0);
 
     const gamesWithLabels = allGames.map(game => {
-        const gameLabels = filter(gamesLabels, gameLabel => gameLabel.game_id === game.id);
-        game.labels = gameLabels.map(gameLabel => find(labels, label => label.id === gameLabel.label_id));
-        return game;
+        const gameLabels = gamesLabels.filter(gameLabel => gameLabel.game_id === game.id);
+        return Object.assign({}, game, {
+            labels: gameLabels.map(gameLabel => labels.find(label => label.id === gameLabel.label_id))
+        });
     });
 
-    const games = filter(gamesWithLabels, game => !game.is_wishlist_item);
-    const gamesInWishList = filter(gamesWithLabels, game => game.is_wishlist_item);
+    const games = gamesWithLabels.filter(game => !get(game, 'is_wishlist_item', false));
+    const gamesInWishList = gamesWithLabels.filter(game => get(game, 'is_wishlist_item', false));
 
     dispatch(actions.loadJsonInformation({ response: { games, gamesInWishList, labels, platforms } }));
 };
@@ -80,9 +79,9 @@ const reverseList = (source, asc) => {
 const setLabelFilter = (idLabelFilter) => (dispatch, getState) => {
     if (idLabelFilter) {
 
-        const gamesInformation = getState().gamesInformation;
-        const sourceFiltered = filter(gamesInformation.get('source'), game => {
-            const label = find(game.labels, label => label.id === idLabelFilter);
+        const source = getState().gamesInformation.get('source');
+        const sourceFiltered = source.filter(game => {
+            const label = game.labels.find(label => label.id === idLabelFilter);
             return !!label;
         });
         const page = 0;
