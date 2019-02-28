@@ -17,12 +17,13 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 // @components
 import ImportDrawer from '../importDrawer/importDrawer';
+import FilterDrawer from '../filterDrawer/filterDrawer';
 // @styles
 import navigatorStyles from './navigatorStyles';
 
 class Navigator extends Component {
     render() {
-        const { gamesInformation, classes, shortByName, toggleDrawer } = this.props;
+        const { classes, gamesInformation, setLabelFilter, shortByName, toggleDrawer } = this.props;
 
         return (
             <AppBar position="static" className={classes.appBar}>
@@ -40,6 +41,12 @@ class Navigator extends Component {
                         importDrawer={gamesInformation.get('importDrawer')}
                         toggleDrawer={toggleDrawer}
                     />
+                    <FilterDrawer
+                        filterDrawer={gamesInformation.get('filterDrawer')}
+                        gamesInformation={gamesInformation}
+                        setLabelFilter={setLabelFilter}
+                        toggleDrawer={toggleDrawer}
+                    />
                 </Toolbar>
             </AppBar>
         );
@@ -49,6 +56,7 @@ class Navigator extends Component {
 Navigator.propTypes = {
     classes: PropTypes.object.isRequired,
     gamesInformation: PropTypes.object.isRequired,
+    setLabelFilter: PropTypes.func.isRequired,
     shortByName: PropTypes.func.isRequired,
     toggleDrawer: PropTypes.func.isRequired
 };

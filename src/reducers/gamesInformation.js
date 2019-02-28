@@ -9,6 +9,7 @@ import { CATALOG_TAB, ITEMS_BY_PAGE } from '../constants/index';
 
 const setInitialState = () => Immutable.fromJS({
     asc: false,
+    filterDrawer: false,
     games: [],
     hasMoreItems: true,
     hasMoreItemsWishList: true,
