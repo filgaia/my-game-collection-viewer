@@ -1,0 +1,13 @@
+{
+  "main.css": "/my-game-collection-viewer/static/css/main.8b3247db.chunk.css",
+  "main.js": "/my-game-collection-viewer/static/js/main.6d7df196.chunk.js",
+  "main.js.map": "/my-game-collection-viewer/static/js/main.6d7df196.chunk.js.map",
+  "static/js/1.07cdfd40.chunk.js": "/my-game-collection-viewer/static/js/1.07cdfd40.chunk.js",
+  "static/js/1.07cdfd40.chunk.js.map": "/my-game-collection-viewer/static/js/1.07cdfd40.chunk.js.map",
+  "runtime~main.js": "/my-game-collection-viewer/static/js/runtime~main.35d85393.js",
+  "runtime~main.js.map": "/my-game-collection-viewer/static/js/runtime~main.35d85393.js.map",
+  "static/css/main.8b3247db.chunk.css.map": "/my-game-collection-viewer/static/css/main.8b3247db.chunk.css.map",
+  "index.html": "/my-game-collection-viewer/index.html",
+  "precache-manifest.e7bdb797dccde3864606859b618736af.js": "/my-game-collection-viewer/precache-manifest.e7bdb797dccde3864606859b618736af.js",
+  "service-worker.js": "/my-game-collection-viewer/service-worker.js"
+}
