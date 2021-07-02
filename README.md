@@ -1,3 +1,7 @@
+# My Game collection Viewer!
+
+![Cover](web/public/images/cover.png)
+
 ## Visiting the Site
 
 See the site [online](https://filgaia.github.io/my-game-collection-viewer)!
@@ -65,6 +69,10 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ### Clean cache for deployment
 
 `rm -rf node_modules/gh-pages/.cache`
+
+### Getting your Google Client API Key
+
+Generate one in the [API Console](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid)
 
 ## Links of interest
 
