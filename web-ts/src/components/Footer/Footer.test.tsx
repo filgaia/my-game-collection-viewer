@@ -1,12 +1,12 @@
 import React from "react";
 import { render, RenderResult } from "@testing-library/react";
-import App from "./App";
+import Footer from "./Footer";
 
-describe("App", () => {
+describe("Footer", () => {
   let wrapper: RenderResult;
 
   beforeEach(() => {
-    wrapper = render(<App />);
+    wrapper = render(<Footer />);
   });
 
   it("renders correctly", () => {

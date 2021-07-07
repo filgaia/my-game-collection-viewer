@@ -14,6 +14,19 @@ This project uses the following techologies
 - `yarn build` - [deployment](https://facebook.github.io/create-react-app/docs/deployment).
 - `yarn eject` - This command will remove the single build dependency from your project.
 
+## Testing
+
+- Place `debugger;` statements in any test and run:
+
+`$ npm run test:debug``
+
+- This will start running your Jest tests, but pause before executing to allow a debugger to attach to the process.
+- Open the following in Chrome
+
+`about:inspect`
+
+- After opening that link, the Chrome Developer Tools will be displayed. Select **inspect** on your process and a breakpoint will be set at the first line of the react script.
+
 ## Links of interest
 
 - [Chackra UI](https://chakra-ui.com/)
