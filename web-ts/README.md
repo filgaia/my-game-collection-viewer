@@ -1,5 +1,12 @@
 # My Game collection Viewer!
 
+## Introduction
+
+This project uses the following techologies
+
+- React Hooks
+- Typescript
+
 ## Available Scripts
 
 - `yarn start` - [http://localhost:3000](http://localhost:3000)
@@ -10,3 +17,4 @@
 ## Links of interest
 
 - [Chackra UI](https://chakra-ui.com/)
+- [React Icons](https://react-icons.github.io/react-icons)

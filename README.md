@@ -12,6 +12,10 @@ This is a viewer of the Mobile App [My Game Collection](http://my-game-collectio
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Requirements
+
+- Tested with [Node 12](https://nodejs.org/en/)
+
 ## Available Scripts
 
 In the project directory, you can run:
