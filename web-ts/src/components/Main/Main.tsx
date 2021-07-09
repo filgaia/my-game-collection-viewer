@@ -1,10 +1,11 @@
 import React from "react";
-import { Box, Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import Catalog from "../Catalog/Catalog";
 
 function Main() {
   return (
     <Box w="100%" boxShadow="base" p={2}>
-      <Text>Body of the page!</Text>
+      <Catalog></Catalog>
     </Box>
   );
 }
