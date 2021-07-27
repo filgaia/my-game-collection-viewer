@@ -3,18 +3,23 @@ export interface IActionType {
   payload?: Object;
 }
 
+export interface IPlatform {
+  id: number;
+  name: string;
+}
+
 export interface ICatalog {
   asc: boolean;
   error?: boolean;
   filterDrawer: boolean;
-  games?: Object[];
+  games: IGame[];
   hasMoreItems: boolean;
   hasMoreItemsWishList: boolean;
   idLabelFilter?: string | null;
   importDrawer: boolean;
   labels: string[];
   loading: boolean;
-  platforms: string[];
+  platforms: IPlatform[];
   source: IGame[];
   sourceFiltered: Object[];
   sourceWishList: Object[];
@@ -64,7 +69,7 @@ export interface ILabel {
 }
 
 export interface IProp {
-  source: Object[];
-  propGames: Object[];
-  propMoreItems: Object[];
+  source: IGame[];
+  propGames: string;
+  propMoreItems: string;
 }

@@ -1,5 +1,7 @@
 # My Game collection Viewer!
 
+![Cover](public/images/cover.png)
+
 ## Introduction
 
 This project uses the following techologies

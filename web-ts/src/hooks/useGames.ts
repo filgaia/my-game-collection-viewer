@@ -85,14 +85,13 @@ export default function useGames({ reducer = gamesReducer } = {}) {
     });
   };
 
-  // TODO: Finish removing the anys and test loading some data
-  const getListByPage = (page: number, source: Object[]) => {
+  const getListByPage = (page: number, source: IGame[]) => {
     const load = ITEMS_BY_PAGE;
     const start = page * load;
     const games = source.slice(start, start + load);
     const hasMoreItems = source.length > start + games.length;
     return {
-      games,
+      games: gamesInformation.games.concat(games),
       hasMoreItems,
     };
   };
