@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gamecollection.mobile">
+    package="com.gamecollection.gameshelf">
    <application
-        android:label="mobile"
+        android:label="Gameshelf"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
