@@ -1,15 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-
-import 'package:archive/archive.dart';
-import 'package:archive/archive_io.dart';
 
 import 'package:path_provider/path_provider.dart';
 
 import 'game.dart';
+import 'import.dart';
 
 class PlayStation extends StatefulWidget {
   const PlayStation({Key? key}) : super(key: key);
@@ -21,11 +17,27 @@ class PlayStation extends StatefulWidget {
 class _PlayStationState extends State<PlayStation> {
   final _games = <Game>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
+  var _loading = false;
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
     return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/data.json');
+  }
+
+  isLoading(value, [db]) {
+    setState(() {
+      _loading = value;
+
+      if (db != null) {
+        _games.addAll(db);
+      }
+    });
   }
 
   @override
@@ -34,7 +46,7 @@ class _PlayStationState extends State<PlayStation> {
       appBar: AppBar(
         title: Text('PS Games'),
         actions: [
-          IconButton(icon: Icon(Icons.file_download), onPressed: _pushImport),
+          Import(isLoading),
         ],
         backgroundColor: Colors.indigoAccent,
       ),
@@ -49,16 +61,23 @@ class _PlayStationState extends State<PlayStation> {
   }
 
   Widget _buildCatalog() {
-    // Check if we have some items. if not empty catalog
-    return _games.length == 0
-        ? _empty()
-        : ListView.builder(
-            padding: const EdgeInsets.all(16.0),
-            itemBuilder: (context, i) {
-              return _buildRow(_games[i]);
-            },
-            itemCount: _games.length,
-          );
+    if (_loading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (_games.length == 0) {
+      return _empty();
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        return _buildRow(_games[i]);
+      },
+      itemCount: _games.length,
+    );
   }
 
   Widget _buildRow(Game game) {
@@ -68,49 +87,5 @@ class _PlayStationState extends State<PlayStation> {
         style: _biggerFont,
       ),
     );
-  }
-
-  Future<void> _pushImport() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['c'],
-    );
-
-    if (result != null) {
-      File file = File(result
-          .files.single.path!); // On Web 'path is null'. We need to use bits
-      final archive = ZipDecoder().decodeBytes(file.readAsBytesSync());
-      final db = <Game>[];
-      final path = await _localPath;
-      print(path);
-
-      // Extract the contents of the Zip archive to disk.
-      for (final file in archive) {
-        final filename = file.name;
-        print(filename);
-        if (file.isFile) {
-          final data = utf8.decode(file.content);
-          final imported = json.decode(data);
-          final backup = imported["backup"];
-
-          for (var game in backup["Game"]) {
-            db.add(Game.fromJson(game));
-          }
-
-          setState(() {
-            _games.addAll(db);
-          });
-
-          /* final data = file.content as List<int>;
-          File(path + filename)
-            ..createSync(recursive: true)
-            ..writeAsBytesSync(data); */
-        } else {
-          Directory(path + filename)..create(recursive: true);
-        }
-      }
-    } else {
-      // User canceled the picker
-    }
   }
 }
