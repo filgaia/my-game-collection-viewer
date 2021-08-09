@@ -1,4 +1,4 @@
-# mobile
+# Gameshelf
 
 Game Collection App
 
@@ -21,4 +21,4 @@ samples, guidance on mobile development, and a full API reference.
 
 ### References
 
-- Packages in [pub.dev](pub.dev)
+- Packages in [pub.dev](https://pub.dev)
