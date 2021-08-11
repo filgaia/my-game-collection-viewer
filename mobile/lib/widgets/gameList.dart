@@ -3,24 +3,25 @@ import 'dart:io';
 
 import 'package:Gameshelf/models/screenArguments.dart';
 import 'package:Gameshelf/widgets/appDrawer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:path_provider/path_provider.dart';
 
 import '../models/catalog.dart';
 import '../models/game.dart';
+import 'gameCard.dart';
 import 'import.dart';
 
-class PlayStation extends StatefulWidget {
-  const PlayStation({Key? key}) : super(key: key);
+class GameList extends StatefulWidget {
+  const GameList({Key? key}) : super(key: key);
 
   @override
-  _PlayStationState createState() => _PlayStationState();
+  _GameListState createState() => _GameListState();
 }
 
-class _PlayStationState extends State<PlayStation> {
+class _GameListState extends State<GameList> {
   var _games = <Game>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
   var _loading = false;
 
   Future<String> get _localPath async {
@@ -54,12 +55,7 @@ class _PlayStationState extends State<PlayStation> {
 
   @override
   Widget build(BuildContext context) {
-    final checkArgs = ModalRoute.of(context)!.settings.arguments;
-    var args = new ScreenArguments("Ps Games", "ps", Colors.blueAccent);
-
-    if (checkArgs != null) {
-      args = checkArgs as ScreenArguments;
-    }
+    final args = ScreenArguments.byRoute(ModalRoute.of(context)!.settings.name);
 
     return Scaffold(
       drawer: AppDrawer.mainDrawer(context),
@@ -71,8 +67,8 @@ class _PlayStationState extends State<PlayStation> {
         backgroundColor: args.color,
       ),
       body: FutureBuilder<Catalog>(
-    future: _catalog(),
-    builder: _buildCatalog,
+        future: _catalog(),
+        builder: _buildCatalog,
       ),
     );
   }
@@ -105,44 +101,35 @@ class _PlayStationState extends State<PlayStation> {
   }
 
   Widget _buildCatalog(BuildContext context, AsyncSnapshot<Catalog> snapshot) {
-    final checkArgs = ModalRoute.of(context)!.settings.arguments;
-    var args = new ScreenArguments("Ps Games", "ps", Colors.blueAccent);
-
-    if (checkArgs != null) {
-      args = checkArgs as ScreenArguments;
-    }
+    final name = ModalRoute.of(context)!.settings.name;
 
     if (_loading) {
       return this._buildLoading();
     }
 
     if (snapshot.hasData) {
-      switch(args.gameType) {
-        case 'xbox':
-          _games = snapshot.data!.xbox;
-          break;
-        case 'ns':
-          _games = snapshot.data!.ns;
-          break;
-        case 'wl':
-          _games = snapshot.data!.wl;
-          break;
-        default:
-          _games = snapshot.data!.ps;
-          break;
-      }
-
+      this._getGames(name, snapshot.data);
 
       if (_games.length == 0) {
         return _empty();
       }
 
-      return ListView.builder(
+      /*return ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
           return _buildRow(_games[i]);
         },
         itemCount: _games.length,
+      ); */
+      return GridView.builder(
+        itemCount: _games.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 5.0,
+          mainAxisSpacing: 5.0,
+          childAspectRatio: 0.6,
+        ),
+        itemBuilder: _buildItem,
       );
     } else if (snapshot.hasError) {
       print('Error: ${snapshot.error}');
@@ -153,12 +140,25 @@ class _PlayStationState extends State<PlayStation> {
     }
   }
 
-  Widget _buildRow(Game game) {
-    return ListTile(
-      title: Text(
-        game.name,
-        style: _biggerFont,
-      ),
-    );
+  void _getGames(String? name, Catalog? data) {
+    switch (name) {
+      case '/xbox':
+        _games = data!.xbox;
+        break;
+      case '/ns':
+        _games = data!.ns;
+        break;
+      case '/wl':
+        _games = data!.wl;
+        break;
+      default:
+        _games = data!.ps;
+        break;
+    }
+  }
+
+  Widget _buildItem(BuildContext context, int index) {
+    Game game = _games[index];
+    return GameCard(game);
   }
 }

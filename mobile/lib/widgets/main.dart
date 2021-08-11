@@ -4,7 +4,7 @@
 
 import 'settings.dart';
 import 'package:flutter/material.dart';
-import 'ps.dart';
+import 'gameList.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,10 +18,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/ps',
       routes: {
-        '/ps': (context) => const PlayStation(),
-        '/xbox': (context) => const PlayStation(),
-        '/ns': (context) => const PlayStation(),
-        '/wl': (context) => const PlayStation(),
+        '/ps': (context) => const GameList(),
+        '/xbox': (context) => const GameList(),
+        '/ns': (context) => const GameList(),
+        '/wl': (context) => const GameList(),
         '/settings': (context) => const AppSettings(),
       },
     );

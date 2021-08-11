@@ -1,4 +1,3 @@
-import 'package:Gameshelf/models/screenArguments.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer {
@@ -20,49 +19,29 @@ class AppDrawer {
           ListTile(
             title: const Text('PlayStation'),
             onTap: () {
-              // Update the state of the app.
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/ps', arguments: ScreenArguments(
-                'PS Games',
-                'ps',
-                Colors.blueAccent
-              ));
+              Navigator.pushNamed(context, '/ps');
             },
           ),
           ListTile(
             title: const Text('Xbox'),
             onTap: () {
-              // Update the state of the app.
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/xbox', arguments: ScreenArguments(
-                  'Xbox Games',
-                  'xbox',
-                  Colors.green
-              ));
+              Navigator.pushNamed(context, '/xbox');
             },
           ),
           ListTile(
             title: const Text('N.Switch'),
             onTap: () {
-              // Update the state of the app.
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/ns', arguments: ScreenArguments(
-                  'N.Switch Games',
-                  'ns',
-                  Colors.red
-              ));
+              Navigator.pushNamed(context, '/ns');
             },
           ),
           ListTile(
             title: const Text('Wishlist'),
             onTap: () {
-              // Update the state of the app.
               Navigator.pop(context);
-              Navigator.pushNamed(context, '/wl', arguments: ScreenArguments(
-                  'Wishlist',
-                  'wl',
-                  Colors.cyan
-              ));
+              Navigator.pushNamed(context, '/wl');
             },
           ),
           ListTile(
