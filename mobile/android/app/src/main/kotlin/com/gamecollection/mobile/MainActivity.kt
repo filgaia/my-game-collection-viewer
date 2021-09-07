@@ -1,4 +1,4 @@
-package com.gamecollection.gameshelf
+package com.gamecollection.GameShelf
 
 import io.flutter.embedding.android.FlutterActivity
 

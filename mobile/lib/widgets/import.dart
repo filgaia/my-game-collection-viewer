@@ -1,4 +1,4 @@
-import 'package:Gameshelf/models/catalog.dart';
+import 'package:GameShelf/models/catalog.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:convert';

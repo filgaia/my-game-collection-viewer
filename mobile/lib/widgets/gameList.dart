@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:Gameshelf/models/screenArguments.dart';
-import 'package:Gameshelf/widgets/appDrawer.dart';
+import 'package:GameShelf/models/screenArguments.dart';
+import 'package:GameShelf/widgets/appDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -114,13 +114,6 @@ class _GameListState extends State<GameList> {
         return _empty();
       }
 
-      /*return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemBuilder: (context, i) {
-          return _buildRow(_games[i]);
-        },
-        itemCount: _games.length,
-      ); */
       return GridView.builder(
         itemCount: _games.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

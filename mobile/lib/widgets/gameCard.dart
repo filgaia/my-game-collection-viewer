@@ -1,43 +1,46 @@
-import 'package:Gameshelf/models/game.dart';
+import 'package:GameShelf/models/game.dart';
+import 'package:GameShelf/utils/util.dart';
 import 'package:flutter/material.dart';
 
 class GameCard extends StatelessWidget {
-  GameCard(this.game);
-
   final Game game;
+
+  GameCard(this.game);
 
   @override
   Widget build(BuildContext context) {
-    return _buildItem(this.game);
+    return _buildItem(context, this.game);
   }
 
-  Widget _buildItem(Game game) {
-    return Card(
-        color: _getBGColor(game.platform),
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Column(children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                game.platform,
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+  Widget _buildItem(BuildContext context, Game game) {
+    return GestureDetector(
+        onTap: () => Navigator.pushNamed(context, '/detail', arguments: game),
+        child: Card(
+            color: getBGColor(game.platform),
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Column(children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    game.platform,
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Expanded(
-            child: Image.network(game.cover,
-                fit: BoxFit.fill, loadingBuilder: _imageLoading),
-          ),
-        ]));
+              Expanded(
+                child: Image.network(game.cover,
+                    fit: BoxFit.fill, loadingBuilder: _imageLoading),
+              ),
+            ])));
   }
 
   Widget _imageLoading(
@@ -58,18 +61,5 @@ class GameCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _getBGColor(String platform) {
-    switch (platform) {
-      case 'Xbox':
-      case 'Xbox 360':
-      case 'Xbox One':
-        return Colors.green;
-      case 'Nintendo Switch':
-        return Colors.red;
-      default:
-        return Colors.blueAccent;
-    }
   }
 }

@@ -1,4 +1,4 @@
-# Gameshelf
+# GameShelf
 
 Game Collection App
 

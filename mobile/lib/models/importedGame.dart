@@ -1,4 +1,4 @@
-import 'package:Gameshelf/models/iGame.dart';
+import 'package:GameShelf/models/iGame.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'game.dart';
