@@ -1,8 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'iGame.dart';
-
-part 'game.g.dart';
+import './iGame.dart';
+part './game.g.dart';
 
 @JsonSerializable()
 class Game implements IGame {

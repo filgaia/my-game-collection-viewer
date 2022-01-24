@@ -1,6 +1,7 @@
-import 'package:GameShelf/models/game.dart';
 import 'package:flutter/material.dart';
-import 'package:GameShelf/utils/util.dart';
+
+import '../models/game.dart';
+import '../utils/util.dart';
 
 class GameDetail extends StatelessWidget {
   const GameDetail({Key? key}) : super(key: key);

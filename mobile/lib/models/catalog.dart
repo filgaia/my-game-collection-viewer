@@ -1,8 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'game.dart';
-
-part 'catalog.g.dart';
+import './game.dart';
+part './catalog.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Catalog {

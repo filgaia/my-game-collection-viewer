@@ -1,6 +1,7 @@
-import 'package:GameShelf/models/game.dart';
-import 'package:GameShelf/utils/util.dart';
 import 'package:flutter/material.dart';
+
+import '../models/game.dart';
+import '../utils/util.dart';
 
 class GameCard extends StatelessWidget {
   final Game game;

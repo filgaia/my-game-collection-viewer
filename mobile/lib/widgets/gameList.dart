@@ -1,17 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:GameShelf/models/screenArguments.dart';
-import 'package:GameShelf/widgets/appDrawer.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:path_provider/path_provider.dart';
 
 import '../models/catalog.dart';
 import '../models/game.dart';
-import 'gameCard.dart';
-import 'import.dart';
+import '../models/screenArguments.dart';
+import '../widgets/appDrawer.dart';
+import './gameCard.dart';
+import './import.dart';
 
 class GameList extends StatefulWidget {
   const GameList({Key? key}) : super(key: key);
@@ -41,9 +40,9 @@ class _GameListState extends State<GameList> {
 
     if (!exists) {
       final created = await file.create(recursive: true);
-      return await created.writeAsString('$data');
+      return await created.writeAsString(data);
     } else {
-      return await file.writeAsString('$data');
+      return await file.writeAsString(data);
     }
   }
 
@@ -76,20 +75,20 @@ class _GameListState extends State<GameList> {
   Future<Catalog> _catalog() async {
     final file = await _localFile;
     final exists = await file.exists();
-    final newCatalog = new Catalog(ps: [], xbox: [], ns: [], wl: []);
+    final newCatalog = Catalog(ps: [], xbox: [], ns: [], wl: []);
 
     if (exists) {
       final data = await file.readAsString();
       return Catalog.fromJson(json.decode(data));
     } else {
-      this._writeFile(json.encode(newCatalog.toJson()));
+      _writeFile(json.encode(newCatalog.toJson()));
     }
 
     return newCatalog;
   }
 
   Widget _empty() {
-    return Center(
+    return const Center(
       child: Text('Is lonely around here. Import or add some games!'),
     );
   }
@@ -104,19 +103,19 @@ class _GameListState extends State<GameList> {
     final name = ModalRoute.of(context)!.settings.name;
 
     if (_loading) {
-      return this._buildLoading();
+      return _buildLoading();
     }
 
     if (snapshot.hasData) {
-      this._getGames(name, snapshot.data);
+      _getGames(name, snapshot.data);
 
-      if (_games.length == 0) {
+      if (_games.isEmpty) {
         return _empty();
       }
 
       return GridView.builder(
         itemCount: _games.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 5.0,
           mainAxisSpacing: 5.0,
@@ -129,7 +128,7 @@ class _GameListState extends State<GameList> {
 
       return _empty();
     } else {
-      return this._buildLoading();
+      return _buildLoading();
     }
   }
 

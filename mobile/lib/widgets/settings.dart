@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'appDrawer.dart';
+import './appDrawer.dart';
 
 class AppSettings extends StatefulWidget {
   const AppSettings({Key? key}) : super(key: key);

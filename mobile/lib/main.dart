@@ -1,12 +1,11 @@
 // Copyright 2018 The Flutter team. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
-import 'package:GameShelf/widgets/gameDetail.dart';
-
-import 'settings.dart';
 import 'package:flutter/material.dart';
-import 'gameList.dart';
+
+import './widgets/gameDetail.dart';
+import './widgets/gameList.dart';
+import './widgets/settings.dart';
 
 void main() => runApp(MyApp());
 

@@ -1,13 +1,12 @@
-import 'package:GameShelf/models/catalog.dart';
-import 'package:flutter/material.dart';
-
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../models/catalog.dart';
 import '../models/game.dart';
 import '../models/importedGame.dart';
 import '../models/platform.dart';
@@ -52,22 +51,24 @@ class _ImportState extends State<Import> {
 
   List<Platform> _loadPlatforms(data) {
     final platforms = <Platform>[];
+
     for (var platform in data) {
       platforms.add(Platform.fromJson(platform));
     }
+
     return platforms;
   }
 
   Future<List<Game>> _loadGames(backup) async {
     final file = await _localFile;
     final exists = await file.exists();
-    var catalog;
+    Catalog catalog;
 
     if (exists) {
       final data = await file.readAsString();
       catalog = Catalog.fromJson(json.decode(data));
     } else {
-      catalog = new Catalog(ps: [], xbox: [], ns: [], wl: []);
+      catalog = Catalog(ps: [], xbox: [], ns: [], wl: []);
     }
 
     final games = backup["Game"];
