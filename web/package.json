@@ -4,6 +4,7 @@
     "private": true,
     "homepage": "https://filgaia.github.io/my-game-collection-viewer",
     "scripts": {
+        "audit:fix": "yarn-audit-fix",
         "build": "node scripts/build.js",
         "deploy": "gh-pages -d ../docs",
         "eslint": "eslint src --color",
@@ -92,6 +93,7 @@
         "react-hot-loader": "^4.7.1",
         "redux-immutable-state-invariant": "^2.1.0",
         "sass-lint": "^1.12.1",
-        "sass-loader": "^7.1.0"
+        "sass-loader": "^7.1.0",
+        "yarn-audit-fix": "^9.0.9"
     }
 }
