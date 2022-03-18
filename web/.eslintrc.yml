@@ -13,8 +13,9 @@ parserOptions:
 plugins:
   - react
 rules: {
-  no-shadow: off,
+  import/no-named-as-default: off,
   no-bitwise: off,
+  no-shadow: off,
   react/jsx-filename-extension: off,
   react/forbid-prop-types: off,
   react/no-array-index-key: off,
