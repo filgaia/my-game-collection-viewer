@@ -4,18 +4,17 @@ import thunk from 'redux-thunk';
 import { rootReducer } from './rootReducer';
 
 const configureStore = () => {
+  const middleware = [
+    thunk,
+    reduxImmutableStateInvariant(),
+  ];
 
-    const middleware = [
-        thunk,
-        reduxImmutableStateInvariant()
-    ];
+  const store = createStore(
+    rootReducer,
+    applyMiddleware(...middleware),
+  );
 
-    const store = createStore(
-        rootReducer,
-        applyMiddleware(...middleware)
-    );
-
-    return store;
+  return store;
 };
 
 export default configureStore;

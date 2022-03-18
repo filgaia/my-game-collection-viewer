@@ -31,3 +31,6 @@ yarn.lock
 
 #editor
 .vscode
+
+# asdf
+.tool-versions

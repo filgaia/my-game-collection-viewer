@@ -3,18 +3,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // @material
 import {
-    Drawer,
-    IconButton,
-    List,
-    ListItem,
-    ListItemIcon,
-    Tooltip
-} from '@material-ui/core';
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  Tooltip,
+} from '@mui/material';
 // https://material.io/tools/icons/?style=baseline
 import {
-    FilterList
-} from '@material-ui/icons';
-import { withStyles } from '@material-ui/core/styles';
+  FilterList,
+} from '@mui/icons-material';
+import withStyles from '@mui/styles/withStyles';
 // @componets
 import LabelTag from '../labelTag/labelTag';
 // @styles
@@ -23,76 +23,82 @@ import filterDrawerStyles from './filterDrawerStyles';
 import { FILTER_DRAWER } from '../../constants/index';
 
 class FilterDrawer extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.onToggleDrawer = this.onToggleDrawer.bind(this);
-    }
+    this.onToggleDrawer = this.onToggleDrawer.bind(this);
+  }
 
-    onToggleDrawer(open) {
-        const response = { drawer: FILTER_DRAWER, open };
-        this.props.toggleDrawer({ response });
-    }
+  onToggleDrawer(open) {
+    const response = { drawer: FILTER_DRAWER, open };
+    this.props.toggleDrawer({ response });
+  }
 
-    buildItems() {
-        const { classes, gamesInformation, setLabelFilter } = this.props;
-        const labelsTagsItems = gamesInformation.get('labels');
+  buildItems() {
+    const { classes, gamesInformation, setLabelFilter } = this.props;
+    const labelsTagsItems = gamesInformation.get('labels');
 
-        const items = labelsTagsItems.map((item, index) => (
-            <ListItem button key={`filter-${index}`}>
-                <ListItemIcon className={classes.listItem}>
-                    <Tooltip title={item.name} aria-label={item.name}>
-                        <LabelTag
-                            key={item.id}
-                            isDrawer
-                            label={item}
-                            gamesInformation={gamesInformation}
-                            setLabelFilter={setLabelFilter}
-                        />
-                    </Tooltip>
-                </ListItemIcon>
-            </ListItem>
-        ));
+    const Tag = React.forwardRef(({ item }, ref) => (
+      <div ref={ref}>
+        <LabelTag
+          key={item.id}
+          isDrawer
+          label={item}
+          gamesInformation={gamesInformation}
+          setLabelFilter={setLabelFilter}
+        />
+      </div>
+    ));
 
-        return (
-            <List>
-                {items}
-            </List>
-        );
-    }
+    const items = labelsTagsItems.map((item, index) => (
+      <ListItem button key={`filter-${index}`}>
+        <ListItemIcon className={classes.listItem}>
+          <Tooltip title={item.name} aria-label={item.name}>
+            <Tag item={item} />
+          </Tooltip>
+        </ListItemIcon>
+      </ListItem>
+    ));
 
-    render() {
-        const { filterDrawer } = this.props;
-        const items = this.buildItems();
+    return (
+      <List>
+        {items}
+      </List>
+    );
+  }
 
-        return (
-            <React.Fragment>
-                <IconButton color="inherit" onClick={() => this.onToggleDrawer(true)}>
-                    <Tooltip title="Filter..." aria-label="Filter...">
-                        <FilterList />
-                    </Tooltip>
-                </IconButton>
-                <Drawer anchor="right" open={filterDrawer} onClose={() => this.onToggleDrawer(false)}>
-                    <div
-                        tabIndex={0}
-                        role="button"
-                        onClick={() => this.onToggleDrawer(false)}
-                        onKeyDown={() => this.onToggleDrawer(false)}
-                    >
-                        {items}
-                    </div>
-                </Drawer>
-            </React.Fragment>
-        );
-    }
+  render() {
+    const { filterDrawer } = this.props;
+    const items = this.buildItems();
+
+    return (
+      <>
+        <IconButton color="inherit" onClick={() => this.onToggleDrawer(true)} size="large">
+          <Tooltip title="Filter..." aria-label="Filter...">
+            <FilterList />
+          </Tooltip>
+        </IconButton>
+        <Drawer anchor="right" open={filterDrawer} onClose={() => this.onToggleDrawer(false)}>
+          <div
+            tabIndex={0}
+            role="button"
+            onClick={() => this.onToggleDrawer(false)}
+            onKeyDown={() => this.onToggleDrawer(false)}
+          >
+            {items}
+          </div>
+        </Drawer>
+      </>
+    );
+  }
 }
 
 FilterDrawer.propTypes = {
-    classes: PropTypes.object.isRequired,
-    filterDrawer: PropTypes.bool.isRequired,
-    gamesInformation: PropTypes.object.isRequired,
-    setLabelFilter: PropTypes.func.isRequired,
-    toggleDrawer: PropTypes.func.isRequired
+  classes: PropTypes.object.isRequired,
+  filterDrawer: PropTypes.bool.isRequired,
+  gamesInformation: PropTypes.object.isRequired,
+  setLabelFilter: PropTypes.func.isRequired,
+  toggleDrawer: PropTypes.func.isRequired,
 };
 
 export default withStyles(filterDrawerStyles)(FilterDrawer);

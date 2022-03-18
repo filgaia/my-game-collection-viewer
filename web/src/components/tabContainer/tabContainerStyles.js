@@ -1,7 +1,7 @@
 const tabContainerStyles = (theme) => ({
-    tab: {
-        padding: 8 * 3
-    }
+  tab: {
+    padding: 8 * 3,
+  },
 });
 
 export default tabContainerStyles;

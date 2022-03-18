@@ -2,9 +2,9 @@
 
 ## Available Scripts
 
-- `yarn start` - [http://localhost:3000](http://localhost:3000)
-- `yarn test` - [running tests](https://facebook.github.io/create-react-app/docs/running-tests).
-- `yarn build` - [deployment](https://facebook.github.io/create-react-app/docs/deployment).
+- `npm start` - [http://localhost:3000](http://localhost:3000)
+- `npm test` - [running tests](https://facebook.github.io/create-react-app/docs/running-tests).
+- `npm build` - [deployment](https://facebook.github.io/create-react-app/docs/deployment).
 
 ### Clean cache for deployment
 
