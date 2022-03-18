@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/my-game-collection-viewer/static/css/main.7a7f52f6.css",
+    "main.js": "/my-game-collection-viewer/static/js/main.213448cd.js",
+    "static/js/787.e3d60634.chunk.js": "/my-game-collection-viewer/static/js/787.e3d60634.chunk.js",
+    "index.html": "/my-game-collection-viewer/index.html",
+    "main.7a7f52f6.css.map": "/my-game-collection-viewer/static/css/main.7a7f52f6.css.map",
+    "main.213448cd.js.map": "/my-game-collection-viewer/static/js/main.213448cd.js.map",
+    "787.e3d60634.chunk.js.map": "/my-game-collection-viewer/static/js/787.e3d60634.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7a7f52f6.css",
+    "static/js/main.213448cd.js"
+  ]
+}
