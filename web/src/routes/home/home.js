@@ -15,7 +15,7 @@ import {
   importFile, initGames, loadGames, setLabelFilter, shortByName, actions as gamesActions,
 } from '../../actions/gamesInformation';
 
-class Home extends Component {
+export class Home extends Component {
   componentDidMount() {
     library.add(fab, faSignInAlt, faSignOutAlt, faFileImport);
   }

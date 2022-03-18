@@ -14,7 +14,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Requirements
 
-- Tested with [Node 12](https://nodejs.org/en/)
+- Tested with [Node 16](https://nodejs.org/en/)
 
 ## Available Scripts
 

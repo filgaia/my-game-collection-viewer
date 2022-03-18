@@ -7,7 +7,7 @@ import withStyles from '@mui/styles/withStyles';
 // @styles
 import footerStyles from './footerStyles';
 
-class Footer extends Component {
+export class Footer extends Component {
   render() {
     const { classes } = this.props;
 
