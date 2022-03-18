@@ -1,13 +1,15 @@
 {
-  "main.css": "/my-game-collection-viewer/static/css/main.c83a5127.chunk.css",
-  "main.js": "/my-game-collection-viewer/static/js/main.5ae411ec.chunk.js",
-  "main.js.map": "/my-game-collection-viewer/static/js/main.5ae411ec.chunk.js.map",
-  "static/js/1.49bf7e47.chunk.js": "/my-game-collection-viewer/static/js/1.49bf7e47.chunk.js",
-  "static/js/1.49bf7e47.chunk.js.map": "/my-game-collection-viewer/static/js/1.49bf7e47.chunk.js.map",
-  "runtime~main.js": "/my-game-collection-viewer/static/js/runtime~main.35d85393.js",
-  "runtime~main.js.map": "/my-game-collection-viewer/static/js/runtime~main.35d85393.js.map",
-  "static/css/main.c83a5127.chunk.css.map": "/my-game-collection-viewer/static/css/main.c83a5127.chunk.css.map",
-  "index.html": "/my-game-collection-viewer/index.html",
-  "precache-manifest.89118ba763b0cb71f31504c24d96d082.js": "/my-game-collection-viewer/precache-manifest.89118ba763b0cb71f31504c24d96d082.js",
-  "service-worker.js": "/my-game-collection-viewer/service-worker.js"
+  "files": {
+    "main.css": "/my-game-collection-viewer/static/css/main.7a7f52f6.css",
+    "main.js": "/my-game-collection-viewer/static/js/main.213448cd.js",
+    "static/js/787.e3d60634.chunk.js": "/my-game-collection-viewer/static/js/787.e3d60634.chunk.js",
+    "index.html": "/my-game-collection-viewer/index.html",
+    "main.7a7f52f6.css.map": "/my-game-collection-viewer/static/css/main.7a7f52f6.css.map",
+    "main.213448cd.js.map": "/my-game-collection-viewer/static/js/main.213448cd.js.map",
+    "787.e3d60634.chunk.js.map": "/my-game-collection-viewer/static/js/787.e3d60634.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7a7f52f6.css",
+    "static/js/main.213448cd.js"
+  ]
 }
