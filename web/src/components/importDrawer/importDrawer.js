@@ -25,6 +25,10 @@ import { IMPORT_DRAWER } from '../../constants/index';
 import Login from '../login/login';
 
 class ImportDrawer extends Component {
+  static buildLogoutButton() {
+    return <Login />;
+  }
+
   constructor(props) {
     super(props);
 
@@ -33,21 +37,19 @@ class ImportDrawer extends Component {
   }
 
   onImportFile(event) {
-    this.props.importFile(get(event, 'target.files.0'));
+    const { importFile } = this.props;
+    importFile(get(event, 'target.files.0'));
   }
 
   onToggleDrawer(open) {
+    const { toggleDrawer } = this.props;
     const response = { drawer: IMPORT_DRAWER, open };
-    this.props.toggleDrawer({ response });
-  }
-
-  buildLogoutButton() {
-    return <Login />;
+    toggleDrawer({ response });
   }
 
   buildItems() {
     const { classes } = this.props;
-    const logoutButton = this.buildLogoutButton();
+    const logoutButton = ImportDrawer.buildLogoutButton();
     const options = [
       { icon: ['fab', 'playstation'], title: 'Coming Soon...' },
       { icon: ['fab', 'xbox'], title: 'Coming Soon...' },
@@ -67,8 +69,8 @@ class ImportDrawer extends Component {
       <div>
         <List>
           <ListItem button key="import-file">
-            <input accept=".c, application/x-zip-compressed" className={classes.input} id="import-file" type="file" onChange={this.onImportFile} />
             <label htmlFor="import-file" className={classes.labelFor}>
+              <input accept=".c, application/x-zip-compressed" className={classes.input} id="import-file" type="file" onChange={this.onImportFile} />
               <ListItemIcon className={classes.listItem}>
                 <Tooltip title="From file" aria-label="From file">
                   <FontAwesomeIcon icon="file-import" size="lg" />

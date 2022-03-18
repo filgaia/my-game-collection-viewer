@@ -1,6 +1,7 @@
 env:
   browser: true
   es2021: true
+  jest: true
 extends:
   - plugin:react/recommended
   - airbnb
@@ -12,6 +13,10 @@ parserOptions:
 plugins:
   - react
 rules: {
+  no-shadow: off,
+  no-bitwise: off,
   react/jsx-filename-extension: off,
-  react/forbid-prop-types: off
+  react/forbid-prop-types: off,
+  react/no-array-index-key: off,
+  react/prefer-stateless-function: off
 }

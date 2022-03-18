@@ -1,4 +1,4 @@
-const tabContainerStyles = (theme) => ({
+const tabContainerStyles = () => ({
   tab: {
     padding: 8 * 3,
   },

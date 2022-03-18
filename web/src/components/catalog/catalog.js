@@ -21,6 +21,14 @@ import catalogStyles from './catalogStyles';
 import { FIRST_PAGE } from '../../constants/index';
 
 class Catalog extends Component {
+  static buildError() {
+    return (
+      <Typography variant="h2" align="center" color="error" gutterBottom>
+        There was an error loading your file.
+      </Typography>
+    );
+  }
+
   buildItems() {
     const { gamesInformation, games, setLabelFilter } = this.props;
 
@@ -75,14 +83,6 @@ class Catalog extends Component {
     ); // Key to remove warning of infinite scroll
   }
 
-  buildError() {
-    return (
-      <Typography variant="h2" align="center" color="error" gutterBottom>
-        There was an error loading your file.
-      </Typography>
-    );
-  }
-
   render() {
     const { gamesInformation } = this.props;
     const loading = gamesInformation.get('loading');
@@ -91,7 +91,7 @@ class Catalog extends Component {
 
     const loader = this.buildLoader();
     const items = this.buildItems();
-    const errorMessage = this.buildError();
+    const errorMessage = Catalog.buildError();
 
     if (error) {
       catalogContainer = errorMessage;

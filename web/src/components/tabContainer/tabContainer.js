@@ -25,4 +25,8 @@ TabContainer.propTypes = {
   dir: PropTypes.string.isRequired,
 };
 
+TabContainer.defaultProps = {
+  children: null,
+};
+
 export default withStyles(tabContainerStyles)(TabContainer);

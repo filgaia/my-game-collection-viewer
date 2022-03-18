@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import withStyles from '@mui/styles/withStyles';
 // @actions
-import { actions as loginActions } from '../../actions/login';
+import loginActions from '../../actions/login';
 // @constants
 import keys from '../../data/keys.json';
 // @styles
@@ -25,14 +25,19 @@ class Login extends Component {
     this.buildLogoutIcon = this.buildLogoutIcon.bind(this);
   }
 
-  checkUserAuthenticated = () => this.props.loginInformation.get('isAuthenticated');
+  checkUserAuthenticated = () => {
+    const { loginInformation } = this.props;
+    loginInformation.get('isAuthenticated');
+  };
 
   handleLoginSuccess = (response) => {
-    this.props.loginSuccess({ tokenId: response.tokenId });
+    const { loginSuccess } = this.props;
+    loginSuccess({ tokenId: response.tokenId });
   };
 
   handleLoginFailure = (response) => {
-    this.props.loginFailure({ error: response.error });
+    const { loginFailure } = this.props;
+    loginFailure({ error: response.error });
   };
 
   buildIcon(icon, title, onClick) {
@@ -89,8 +94,8 @@ export default connect(
     loginInformation: state.login,
   }),
   {
-    loginFailure: loginActions.loginFailure,
-    loginSuccess: loginActions.loginSuccess,
-    logoutSuccess: loginActions.logoutSuccess,
+    loginFailure: loginActions.actions.loginFailure,
+    loginSuccess: loginActions.actions.loginSuccess,
+    logoutSuccess: loginActions.actions.logoutSuccess,
   },
 )(withStyles(loginStyles)(Login));

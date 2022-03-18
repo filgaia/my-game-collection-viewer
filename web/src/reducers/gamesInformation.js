@@ -60,7 +60,10 @@ const gameInformationReducer = handleActions(
       [get(action, 'payload.response.propGames')]: get(action, 'payload.response.games', []),
       [get(action, 'payload.response.propMoreItems')]: get(action, 'payload.response.hasMoreItems', false),
     }),
-    [combineActions(actions.shortDataByName, actions.setInformationFilter)]: (state) => state.merge({
+    [combineActions(
+      actions.shortDataByName,
+      actions.setInformationFilter,
+    )]: (state) => state.merge({
       loading: true,
     }),
     [actions.shortDataByNameSuccess]: (state, action) => shortDataByName(state, action),

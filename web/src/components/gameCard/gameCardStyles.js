@@ -1,4 +1,4 @@
-const gameCardStyles = (theme) => ({
+const gameCardStyles = () => ({
   card: {
     height: '100%',
     display: 'flex',

@@ -7,6 +7,6 @@ const actions = createActions(
   'LOGOUT_SUCCESS',
 );
 
-export {
+export default {
   actions,
 };

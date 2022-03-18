@@ -19,15 +19,18 @@ import { CATALOG_TAB, WISHLIST_TAB } from '../../constants/index';
 
 class SwipeableView extends Component {
   componentDidMount() {
-    this.props.initGames();
+    const { initGames } = this.props;
+    initGames();
   }
 
   handleChange = (event, tab) => {
-    this.props.setTab({ tab });
+    const { setTab } = this.props;
+    setTab({ tab });
   };
 
   handleChangeIndex = (tab) => {
-    this.props.setTab({ tab });
+    const { setTab } = this.props;
+    setTab({ tab });
   };
 
   buildCatalogTab() {

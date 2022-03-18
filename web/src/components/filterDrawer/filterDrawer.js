@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // @vendors
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -30,8 +31,9 @@ class FilterDrawer extends Component {
   }
 
   onToggleDrawer(open) {
+    const { toggleDrawer } = this.props;
     const response = { drawer: FILTER_DRAWER, open };
-    this.props.toggleDrawer({ response });
+    toggleDrawer({ response });
   }
 
   buildItems() {
@@ -39,7 +41,7 @@ class FilterDrawer extends Component {
     const labelsTagsItems = gamesInformation.get('labels');
 
     const Tag = React.forwardRef(({ item }, ref) => (
-      <div ref={ref}>
+      <div className={classes.tagDiv} ref={ref}>
         <LabelTag
           key={item.id}
           isDrawer

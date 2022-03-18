@@ -31,14 +31,15 @@ class GameCard extends Component {
   }
 
   componentDidMount() {
-    this.checkImage(this.props.image);
+    const { image } = this.props;
+    this.checkImage(image);
   }
 
   checkImage(src) {
     const img = new Image();
     const imageSrc = ERROR_IMAGE;
 
-    img.onerror = (e) => this.setState({ imageSrc });
+    img.onerror = () => this.setState({ imageSrc });
     img.src = src;
   }
 
@@ -95,7 +96,7 @@ class GameCard extends Component {
 }
 
 GameCard.propTypes = {
-  idGame: PropTypes.number.isRequired,
+  // idGame: PropTypes.number.isRequired,
   classes: PropTypes.object.isRequired,
   description: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,

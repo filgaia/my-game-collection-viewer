@@ -1,6 +1,7 @@
 import { CATALOG_TAB } from '../constants/index';
 
-const tagCodeToColor = (num, opacity) => {
+const tagCodeToColor = (n, opacity) => {
+  let num = n;
   num >>>= 0;
   const b = num & 0xFF;
   const g = (num & 0xFF00) >>> 8;

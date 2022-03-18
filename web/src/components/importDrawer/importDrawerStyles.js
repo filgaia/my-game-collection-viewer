@@ -1,4 +1,4 @@
-const importDrawerStyles = (theme) => ({
+const importDrawerStyles = () => ({
   listItem: {
     marginRight: 0,
   },

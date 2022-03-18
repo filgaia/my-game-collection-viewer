@@ -1,4 +1,4 @@
-const labelTagStyles = (theme) => ({
+const labelTagStyles = () => ({
   chip: {
     marginLeft: '10px',
     '&:hover': {

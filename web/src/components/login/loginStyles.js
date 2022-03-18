@@ -1,4 +1,4 @@
-const loginStyles = (theme) => ({
+const loginStyles = () => ({
   listItem: {
     marginRight: 0,
   },
