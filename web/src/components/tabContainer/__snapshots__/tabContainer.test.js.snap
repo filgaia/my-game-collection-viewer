@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TabContainer /> renders correctly 1`] = `
+<div
+  className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+  dir="left"
+/>
+`;

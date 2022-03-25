@@ -7,7 +7,7 @@ import withStyles from '@mui/styles/withStyles';
 // @styles
 import tabContainerStyles from './tabContainerStyles';
 
-class TabContainer extends Component {
+export class TabContainer extends Component {
   render() {
     const { classes, children, dir } = this.props;
 

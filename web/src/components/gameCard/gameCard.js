@@ -21,7 +21,7 @@ import gameCardStyles from './gameCardStyles';
 // @constants
 import { ERROR_IMAGE } from '../../constants/index';
 
-class GameCard extends Component {
+export class GameCard extends Component {
   constructor(props) {
     super(props);
 

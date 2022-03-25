@@ -7,7 +7,7 @@ import withStyles from '@mui/styles/withStyles';
 // @styles
 import titleStyles from './titleStyles';
 
-class Title extends Component {
+export class Title extends Component {
   render() {
     const { classes } = this.props;
 

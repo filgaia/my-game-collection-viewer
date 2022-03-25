@@ -23,7 +23,7 @@ import filterDrawerStyles from './filterDrawerStyles';
 // @constants
 import { FILTER_DRAWER } from '../../constants/index';
 
-class FilterDrawer extends Component {
+export class FilterDrawer extends Component {
   constructor(props) {
     super(props);
 
@@ -52,7 +52,7 @@ class FilterDrawer extends Component {
       </div>
     ));
 
-    const items = labelsTagsItems.map((item, index) => (
+    const items = labelsTagsItems ? labelsTagsItems.map((item, index) => (
       <ListItem button key={`filter-${index}`}>
         <ListItemIcon className={classes.listItem}>
           <Tooltip title={item.name} aria-label={item.name}>
@@ -60,7 +60,7 @@ class FilterDrawer extends Component {
           </Tooltip>
         </ListItemIcon>
       </ListItem>
-    ));
+    )) : null;
 
     return (
       <List>

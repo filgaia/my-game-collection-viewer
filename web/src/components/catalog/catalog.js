@@ -20,7 +20,7 @@ import catalogStyles from './catalogStyles';
 // @constants
 import { FIRST_PAGE } from '../../constants/index';
 
-class Catalog extends Component {
+export class Catalog extends Component {
   static buildError() {
     return (
       <Typography variant="h2" align="center" color="error" gutterBottom>

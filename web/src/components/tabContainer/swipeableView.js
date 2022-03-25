@@ -17,7 +17,7 @@ import Catalog from '../catalog/catalog';
 // @constants
 import { CATALOG_TAB, WISHLIST_TAB } from '../../constants/index';
 
-class SwipeableView extends Component {
+export class SwipeableView extends Component {
   componentDidMount() {
     const { initGames } = this.props;
     initGames();

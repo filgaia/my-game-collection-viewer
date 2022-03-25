@@ -24,7 +24,7 @@ import { IMPORT_DRAWER } from '../../constants/index';
 // @components
 import Login from '../login/login';
 
-class ImportDrawer extends Component {
+export class ImportDrawer extends Component {
   static buildLogoutButton() {
     return <Login />;
   }

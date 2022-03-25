@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Title /> renders correctly 1`] = `
+<div>
+  <div>
+    <h1
+      className="MuiTypography-root MuiTypography-h2 MuiTypography-alignCenter MuiTypography-gutterBottom css-10759ka-MuiTypography-root"
+    >
+      My Game Collection Viewer
+    </h1>
+    <p
+      className="MuiTypography-root MuiTypography-h6 MuiTypography-alignCenter MuiTypography-paragraph css-1wu2fk9-MuiTypography-root"
+    >
+      Viewer for the great app My Game Collection!
+    </p>
+  </div>
+</div>
+`;

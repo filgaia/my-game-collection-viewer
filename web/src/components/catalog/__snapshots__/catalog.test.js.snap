@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Catalog /> renders correctly 1`] = `
+<main>
+  <div>
+    <div
+      className=""
+    >
+      <div
+        className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-mhc70k-MuiGrid-root"
+      />
+    </div>
+  </div>
+</main>
+`;

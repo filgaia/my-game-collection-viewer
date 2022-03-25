@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Footer /> renders correctly 1`] = `
+<footer>
+  <h6
+    className="MuiTypography-root MuiTypography-h6 MuiTypography-alignCenter MuiTypography-gutterBottom css-tcrtuv-MuiTypography-root"
+  >
+    Filgaia developments
+  </h6>
+  <p
+    className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-alignCenter css-1xatcrf-MuiTypography-root"
+  >
+    Alone in the fields
+  </p>
+</footer>
+`;

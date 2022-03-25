@@ -12,7 +12,7 @@ import { tagCodeToColor } from '../../utilities/index';
 // @constants
 import { CARD_OPACITY } from '../../constants/index';
 
-class LabelTag extends Component {
+export class LabelTag extends Component {
   constructor(props) {
     super(props);
 

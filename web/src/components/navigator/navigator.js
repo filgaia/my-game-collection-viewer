@@ -21,7 +21,7 @@ import FilterDrawer from '../filterDrawer/filterDrawer';
 // @styles
 import navigatorStyles from './navigatorStyles';
 
-class Navigator extends Component {
+export class Navigator extends Component {
   render() {
     const {
       classes, importFile, gamesInformation, setLabelFilter, shortByName, toggleDrawer,

@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FilterDrawer /> renders correctly 1`] = `
+<button
+  className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-1pz7awu-MuiButtonBase-root-MuiIconButton-root"
+  disabled={false}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onContextMenu={[Function]}
+  onDragLeave={[Function]}
+  onFocus={[Function]}
+  onKeyDown={[Function]}
+  onKeyUp={[Function]}
+  onMouseDown={[Function]}
+  onMouseLeave={[Function]}
+  onMouseUp={[Function]}
+  onTouchEnd={[Function]}
+  onTouchMove={[Function]}
+  onTouchStart={[Function]}
+  tabIndex={0}
+  type="button"
+>
+  <svg
+    aria-hidden={true}
+    aria-label="Filter..."
+    aria-labelledby={null}
+    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+    data-mui-internal-clone-element={true}
+    data-testid="FilterListIcon"
+    focusable="false"
+    onBlur={[Function]}
+    onFocus={[Function]}
+    onMouseLeave={[Function]}
+    onMouseOver={[Function]}
+    onTouchEnd={[Function]}
+    onTouchStart={[Function]}
+    viewBox="0 0 24 24"
+  >
+    <path
+      d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"
+    />
+  </svg>
+  <span
+    className="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+  />
+</button>
+`;
