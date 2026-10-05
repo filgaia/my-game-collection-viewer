@@ -1,4 +1,4 @@
-import { CATALOG_TAB } from "../constants/index";
+﻿import { CATALOG_TAB } from "../constants/index";
 import { ICatalog } from "../models/gamesModel";
 
 const setInitialState = (): ICatalog => ({
@@ -12,6 +12,7 @@ const setInitialState = (): ICatalog => ({
   labels: [],
   loading: true,
   platforms: [],
+  remote: false,
   source: [],
   sourceFiltered: [],
   sourceWishList: [],
@@ -20,3 +21,4 @@ const setInitialState = (): ICatalog => ({
 });
 
 export default setInitialState;
+

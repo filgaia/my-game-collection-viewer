@@ -1,4 +1,4 @@
-export interface IActionType {
+﻿export interface IActionType {
   type: string;
   payload?: Object;
 }
@@ -19,6 +19,7 @@ export interface ICatalog {
   importDrawer: boolean;
   labels: string[];
   loading: boolean;
+  remote: boolean;
   platforms: IPlatform[];
   source: IGame[];
   sourceFiltered: IGame[];
@@ -57,6 +58,7 @@ export interface IGame {
   collector_has_digital?: boolean;
   hltb_json?: string;
   igdb_id?: number;
+  link?: string;
 }
 
 export interface IGameLabel {
@@ -75,3 +77,5 @@ export interface IProp {
   propGames: string;
   propMoreItems: string;
 }
+
+

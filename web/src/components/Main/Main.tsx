@@ -1,9 +1,10 @@
-import React from "react";
+﻿import React from "react";
 import { Box, Icon, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
-import { MdFavorite, MdLibraryBooks } from "react-icons/md";
+import { MdFavorite, MdLibraryBooks, MdLock } from "react-icons/md";
 import Catalog from "../Catalog/Catalog";
+import Unlocks from "../Unlocks/Unlocks";
 import useGames from "../../hooks/useGames";
-import { CATALOG_TAB, WISHLIST_TAB } from "../../constants/index";
+import { CATALOG_TAB, UNLOCKS_TAB, WISHLIST_TAB } from "../../constants/index";
 import { IGame, IProp } from "../../models/gamesModel";
 
 type GamesApi = ReturnType<typeof useGames>;
@@ -57,7 +58,7 @@ function Main({ games: api }: { games: GamesApi }) {
 
   return (
     <Tabs isFitted index={info.tab} onChange={setTab} w="100%">
-      <TabList bg="#f5f5f5" boxShadow="0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12)">
+      <TabList position="sticky" top={0} zIndex={10} bg="#f5f5f5" boxShadow="0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12)">
         <Tab sx={tabStyles}>
           <Icon as={MdLibraryBooks} w={5} h={5} />
           Catalog
@@ -65,6 +66,10 @@ function Main({ games: api }: { games: GamesApi }) {
         <Tab sx={tabStyles}>
           <Icon as={MdFavorite} w={5} h={5} />
           Wishlist
+        </Tab>
+        <Tab sx={tabStyles} isDisabled={!info.remote}>
+          <Icon as={MdLock} w={5} h={5} />
+          Unlocks
         </Tab>
       </TabList>
       <TabPanels>
@@ -74,9 +79,15 @@ function Main({ games: api }: { games: GamesApi }) {
         <TabPanel p={3}>
           {buildPanel(info.tab === WISHLIST_TAB, info.wishList, info.hasMoreItemsWishList, wishListParams)}
         </TabPanel>
+        <TabPanel p={3}>
+          {info.tab === UNLOCKS_TAB && (
+            <Unlocks collection={info.source} platforms={info.platforms} wishlist={info.sourceWishList} />
+          )}
+        </TabPanel>
       </TabPanels>
     </Tabs>
   );
 }
 
 export default Main;
+

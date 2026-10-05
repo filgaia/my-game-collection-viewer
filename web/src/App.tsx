@@ -9,10 +9,10 @@ import useGames from "./hooks/useGames";
 
 function App() {
   const games = useGames();
-  const { initGames, shortByName } = games;
+  const { initRemoteGames, shortByName } = games;
 
   useEffect(() => {
-    initGames(); // Run only once
+    initRemoteGames(); // Run only once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

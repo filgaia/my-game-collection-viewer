@@ -37,6 +37,7 @@ function gamesReducer(state: ICatalog, action: IActionType): ICatalog {
         sourceWishList: get(action, "payload.response.gamesInWishList", []),
         labels: get(action, "payload.response.labels", []),
         platforms: get(action, "payload.response.platforms", []),
+        remote: get(action, "payload.response.remote", false),
       };
     }
     case actionTypes.LOAD_GAMES_INFORMATION: {
@@ -123,3 +124,4 @@ function gamesReducer(state: ICatalog, action: IActionType): ICatalog {
 }
 
 export default gamesReducer;
+

@@ -1,7 +1,8 @@
-import React from "react";
-import { AspectRatio, Box, Button, Image, ScaleFade, Tag, Text } from "@chakra-ui/react";
-import { CARD_OPACITY, ERROR_IMAGE } from "../../constants/index";
+﻿import React from "react";
+import { Box, Button, ScaleFade, Tag, Text } from "@chakra-ui/react";
+import { CARD_OPACITY } from "../../constants/index";
 import { tagCodeToColor } from "../../utilities/index";
+import GameCover from "../GameCover/GameCover";
 import { IGame } from "../../models/gamesModel";
 
 interface GameCardProps {
@@ -23,15 +24,7 @@ function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardP
         overflow="hidden"
         boxShadow="0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)"
       >
-        <AspectRatio ratio={16 / 9}>
-          <Image
-            src={game.image_url_medium}
-            alt={game.name}
-            objectFit="cover"
-            fallbackSrc={ERROR_IMAGE}
-            fallbackStrategy="onError"
-          />
-        </AspectRatio>
+        <GameCover name={game.name} imageUrl={game.image_url_medium} />
         <Box p={4}>
           <Text fontSize="xl" lineHeight="1.334" color="rgba(0,0,0,0.87)">
             {game.name}
@@ -77,7 +70,12 @@ function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardP
           })}
         </Box>
         <Box px={2} pb={2} textAlign="left">
-          <Button size="sm" variant="ghost" color="#1976d2" textTransform="uppercase" fontWeight="500">
+          <Button
+            as={game.link ? "a" : undefined}
+            href={game.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            size="sm" variant="ghost" color="#1976d2" textTransform="uppercase" fontWeight="500">
             View
           </Button>
         </Box>
@@ -87,3 +85,8 @@ function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardP
 }
 
 export default GameCard;
+
+
+
+
+

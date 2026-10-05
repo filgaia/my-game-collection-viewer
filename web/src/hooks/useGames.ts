@@ -1,12 +1,13 @@
-//@vendor
+﻿//@vendor
 import React from "react";
 import JSZip from "jszip";
 import get from "lodash/get";
 // @helpers
 import { getSource } from "./../utilities/index";
+import { fetchDekuDealsGames } from "./../utilities/dekudeals";
 // @constants
 import { backup } from "./../data/db.json";
-import { ITEMS_BY_PAGE } from "./../constants/index";
+import { ITEMS_BY_PAGE, UNLOCKS_TAB } from "./../constants/index";
 import { actionTypes } from "../actionTypes/gamesTypes";
 import gamesReducer from "../reducers/gamesReducer";
 import setInitialState from "../defaultState/gamesDefault";
@@ -83,6 +84,19 @@ export default function useGames({ reducer = gamesReducer } = {}) {
         response: { games, gamesInWishList, labels, platforms },
       },
     });
+  };
+
+  // Deku Deals is the source of truth; db.json is used when it cannot be loaded
+  const initRemoteGames = async () => {
+    try {
+      const response = await fetchDekuDealsGames();
+      dispatch({
+        type: actionTypes.LOAD_JSON_INFORMATION,
+        payload: { response: { ...response, remote: true } },
+      });
+    } catch {
+      initGames();
+    }
   };
 
   const getListByPage = (page: number, source: IGame[], current: IGame[]) => {
@@ -170,6 +184,7 @@ export default function useGames({ reducer = gamesReducer } = {}) {
 
   const shortByName = () => {
     const tab = gamesInformation.tab;
+    if (tab === UNLOCKS_TAB) return;
     const idLabelFilter = gamesInformation.idLabelFilter;
     let data = getSource(tab, idLabelFilter);
     const source = reverseList(
@@ -193,9 +208,13 @@ export default function useGames({ reducer = gamesReducer } = {}) {
     gamesInformation,
     importFile,
     initGames,
+    initRemoteGames,
     loadGames,
     setLabelFilter,
     setTab,
     shortByName,
   };
 }
+
+
+
