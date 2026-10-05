@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { render, RenderResult } from "@testing-library/react";
 import Catalog from "./Catalog";
 
@@ -33,8 +33,8 @@ describe("Catalog", () => {
 
   it("renders the game card", () => {
     expect(wrapper.getByText("Game")).toBeInTheDocument();
-    expect(wrapper.getByText("Playstation 3")).toBeInTheDocument();
-    expect(wrapper.getByText("Description")).toBeInTheDocument();
+    expect(wrapper.container.querySelector("svg")).toBeInTheDocument();
+    expect(wrapper.queryByText("Description")).not.toBeInTheDocument(); // note only shows on hover
     expect(wrapper.getByText("PS3")).toBeInTheDocument();
   });
 

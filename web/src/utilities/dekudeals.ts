@@ -1,19 +1,32 @@
-import { IGame, ILabel, IPlatform } from "../models/gamesModel";
+﻿import { IGame, ILabel, IPlatform } from "../models/gamesModel";
 
 interface DekuItem {
   name: string;
   link?: string;
   added_at?: string;
-  format?: string;
+  status?: string;
   note?: string;
   platform?: string;
 }
 
 const API_BASE = `${import.meta.env.BASE_URL}api`;
 
-const FORMAT_LABELS: Record<string, ILabel> = {
-  digital: { id: 1, name: "Digital", background_color: 0x64b5f6 },
-  physical: { id: 2, name: "Physical", background_color: 0x81c784 },
+const LABEL_COLORS = [0x64b5f6, 0x81c784, 0xffb74d, 0xba68c8, 0xe57373, 0x4db6ac, 0xf06292];
+
+// One pill per distinct status value; items without a status get no pill
+const getStatusLabel = (status: string | undefined, labels: ILabel[]): ILabel | undefined => {
+  const name = status?.trim();
+  if (!name) return undefined;
+  let label = labels.find((l) => l.name?.toLowerCase() === name.toLowerCase());
+  if (!label) {
+    label = {
+      id: labels.length + 1,
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      background_color: LABEL_COLORS[labels.length % LABEL_COLORS.length],
+    };
+    labels.push(label);
+  }
+  return label;
 };
 
 const fetchItems = async (file: string): Promise<DekuItem[]> => {
@@ -33,7 +46,8 @@ const toGame = (
   item: DekuItem,
   id: number,
   isWishlist: boolean,
-  platforms: IPlatform[]
+  platforms: IPlatform[],
+  labels: ILabel[]
 ): IGame => {
   let platform_id: number | undefined;
   if (item.platform) {
@@ -44,7 +58,7 @@ const toGame = (
     }
     platform_id = platform.id;
   }
-  const label = item.format ? FORMAT_LABELS[item.format.toLowerCase()] : undefined;
+  const label = getStatusLabel(item.status, labels);
 
   return {
     id,
@@ -70,11 +84,12 @@ export const fetchDekuDealsGames = async (): Promise<{
     fetchItems("wishlist.json"),
   ]);
   const platforms: IPlatform[] = [];
+  const labels: ILabel[] = [];
 
   return {
-    games: collection.map((item, i) => toGame(item, i + 1, false, platforms)),
-    gamesInWishList: wishlist.map((item, i) => toGame(item, i + 1, true, platforms)),
-    labels: Object.values(FORMAT_LABELS),
+    games: collection.map((item, i) => toGame(item, i + 1, false, platforms, labels)),
+    gamesInWishList: wishlist.map((item, i) => toGame(item, i + 1, true, platforms, labels)),
+    labels,
     platforms,
   };
 };
@@ -93,4 +108,5 @@ export const fetchGameImage = (name: string): Promise<string | null> => {
   }
   return imageCache.get(name)!;
 };
+
 

@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Box, Flex, Tag, Text } from "@chakra-ui/react";
+import { Box, Tag, Text } from "@chakra-ui/react";
 import {
   Background,
   Controls,
@@ -14,9 +14,9 @@ import {
   useViewport,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import GameCover from "../GameCover/GameCover";
+import GameCard from "../GameCard/GameCard";
 import { buildUnlockGroups } from "../../utilities/unlocks";
-import { IGame, IPlatform } from "../../models/gamesModel";
+import { IGame, ILabel, IPlatform } from "../../models/gamesModel";
 
 interface UnlocksProps {
   collection: IGame[];
@@ -25,14 +25,18 @@ interface UnlocksProps {
 }
 
 interface GameNodeData extends Record<string, unknown> {
-  name: string;
-  platform?: string;
-  imageUrl?: string;
-  tag?: string;
+  game: IGame;
+  platformName?: string;
 }
 
+const noop = () => undefined;
+
+// Ownership pills use ids far from the Deku Deals status labels
+const OWNED_LABEL: ILabel = { id: 9001, name: "Owned", background_color: 0x81c784 };
+const WISHLIST_LABEL: ILabel = { id: 9002, name: "Wishlist", background_color: 0xf06292 };
+
 const NODE_WIDTH = 240;
-const NODE_HEIGHT = 230;
+const NODE_HEIGHT = 230; // GameCard height: 16:9 cover + title + footer
 const COLUMN_GAP = 140;
 const ROW_GAP = 30;
 const GROUP_GAP = 60;
@@ -43,30 +47,9 @@ const groupHeight = (targets: number) => targets * NODE_HEIGHT + (targets - 1) *
 
 function GameNode({ data }: NodeProps<Node<GameNodeData>>) {
   return (
-    <Box
-      w={`${NODE_WIDTH}px`}
-      bg="white"
-      borderRadius="4px"
-      overflow="hidden"
-      boxShadow="0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)"
-    >
+    <Box w={`${NODE_WIDTH}px`} className="nopan nowheel" pointerEvents="all">
       <Handle type="target" position={Position.Left} />
-      <GameCover name={data.name} imageUrl={data.imageUrl} />
-      <Box p={3} textAlign="left">
-        <Text fontSize="md" color="rgba(0,0,0,0.87)" noOfLines={2}>
-          {data.name}
-        </Text>
-        <Flex gap={2} align="center" minH="22px">
-          <Text fontSize="sm" color="rgba(0,0,0,0.6)">
-            {data.platform}
-          </Text>
-          {data.tag && (
-            <Tag size="sm" borderRadius="full">
-              {data.tag}
-            </Tag>
-          )}
-        </Flex>
-      </Box>
+      <GameCard game={data.game} platformName={data.platformName} onLabelClick={noop} />
       <Handle type="source" position={Position.Right} />
     </Box>
   );
@@ -149,10 +132,8 @@ function Unlocks({ collection, wishlist, platforms }: UnlocksProps) {
         type: "game",
         position: { x, y: y + (height - NODE_HEIGHT) / 2 },
         data: {
-          name: game.name,
-          imageUrl: game.image_url_medium,
-          platform: platforms.find((p) => p.id === game.platform_id)?.name,
-          tag: inWishlist ? "Wishlist" : undefined,
+          game: inWishlist ? { ...game, labels: [...(game.labels ?? []), WISHLIST_LABEL] } : game,
+          platformName: platforms.find((p) => p.id === game.platform_id)?.name,
         },
       });
 
@@ -165,10 +146,14 @@ function Unlocks({ collection, wishlist, platforms }: UnlocksProps) {
           type: "game",
           position: { x: x + NODE_WIDTH + COLUMN_GAP, y: y + t * (NODE_HEIGHT + ROW_GAP) },
           data: {
-            name: target.name,
-            imageUrl: known?.image_url_medium,
-            platform: target.platform,
-            tag: owned.has(key) ? "Owned" : wished.has(key) ? "Wishlist" : undefined,
+            game: {
+              id: -1,
+              name: target.name,
+              image_url_medium: known?.image_url_medium,
+              link: known?.link,
+              labels: owned.has(key) ? [OWNED_LABEL] : wished.has(key) ? [WISHLIST_LABEL] : [],
+            },
+            platformName: target.platform,
           },
         });
         edges.push({
@@ -226,6 +211,9 @@ function Unlocks({ collection, wishlist, platforms }: UnlocksProps) {
 }
 
 export default Unlocks;
+
+
+
 
 
 

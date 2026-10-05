@@ -1,8 +1,9 @@
 ﻿import React from "react";
-import { Box, Button, ScaleFade, Tag, Text } from "@chakra-ui/react";
-import { CARD_OPACITY } from "../../constants/index";
+import { Box, Button, Flex, Icon, ScaleFade, Tag, Text, Tooltip } from "@chakra-ui/react";
+import { MdStickyNote2 } from "react-icons/md";
 import { tagCodeToColor } from "../../utilities/index";
 import GameCover from "../GameCover/GameCover";
+import PlatformIcon from "../PlatformIcon/PlatformIcon";
 import { IGame } from "../../models/gamesModel";
 
 interface GameCardProps {
@@ -13,8 +14,23 @@ interface GameCardProps {
 }
 
 function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardProps) {
+  const titleRef = React.useRef<HTMLParagraphElement>(null);
+  const [truncated, setTruncated] = React.useState(false);
+
+  // Re-checked on resize so the tooltip only exists while the title is cut off
+  React.useLayoutEffect(() => {
+    const el = titleRef.current;
+    if (!el) return;
+    const check = () => setTruncated(el.scrollWidth > el.clientWidth);
+    check();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(check);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [game.name]);
+
   return (
-    <ScaleFade initialScale={0.9} in>
+    <ScaleFade initialScale={0.9} in style={{ height: "100%" }}>
       <Box
         display="flex"
         flexDirection="column"
@@ -24,67 +40,89 @@ function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardP
         overflow="hidden"
         boxShadow="0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)"
       >
-        <GameCover name={game.name} imageUrl={game.image_url_medium} />
+        <Box position="relative">
+          <GameCover name={game.name} imageUrl={game.image_url_medium} />
+          <Flex position="absolute" top={2} right={2} gap={1} maxW="calc(100% - 16px)" flexWrap="wrap" justify="flex-end">
+            {game.labels?.map((label) => {
+              const selected = idLabelFilter === label.id;
+              return (
+                <Tag
+                  key={label.id}
+                  as="button"
+                  size="sm"
+                  borderRadius="full"
+                  color="black"
+                  fontWeight={selected ? "bold" : "normal"}
+                  px={3}
+                  cursor="pointer"
+                  boxShadow="0 1px 3px rgba(0,0,0,0.4)"
+                  style={{
+                    backgroundColor: tagCodeToColor(label.background_color, selected ? 1 : 0.9),
+                  }}
+                  _hover={{ fontWeight: "bold" }}
+                  onClick={() => onLabelClick(label.id)}
+                >
+                  {label.name}
+                </Tag>
+              );
+            })}
+          </Flex>
+          <Box position="absolute" bottom={2} left={2}>
+            <PlatformIcon name={platformName} />
+          </Box>
+        </Box>
         <Box p={4}>
-          <Text fontSize="xl" lineHeight="1.334" color="rgba(0,0,0,0.87)">
-            {game.name}
-          </Text>
-          <Text fontSize="sm" color="rgba(0,0,0,0.6)">
-            {platformName}
-          </Text>
+          <Tooltip label={game.name} isDisabled={!truncated} hasArrow placement="top-start">
+            <Text ref={titleRef} fontSize="xl" lineHeight="1.334" isTruncated color="rgba(0,0,0,0.87)">
+              {game.name}
+            </Text>
+          </Tooltip>
         </Box>
-        <Box px={4} pb={4} flexGrow={1}>
-          <Text fontSize="sm" isTruncated>
-            {game.description_short}
-          </Text>
-        </Box>
-        <Box px={4} pb={2} textAlign="left" minH="30px">
-          {game.labels?.map((label) => {
-            const selected = idLabelFilter === label.id;
-            return (
-              <Tag
-                key={label.id}
-                as="button"
+        <Flex px={2} pb={2} mt="auto" align="center" justify="space-between">
+          <Box>
+            {game.link && (
+              <Button
+                as="a"
+                href={game.link}
+                target="_blank"
+                rel="noopener noreferrer"
                 size="sm"
-                borderRadius="full"
-                color="black"
-                fontWeight={selected ? "bold" : "normal"}
-                mr={2}
-                px={3}
-                cursor="pointer"
-                style={{
-                  backgroundColor: tagCodeToColor(
-                    label.background_color,
-                    selected ? 1 : CARD_OPACITY
-                  ),
-                }}
-                _hover={{
-                  fontWeight: "bold",
-                  boxShadow: "2px 2px 1px 0px rgba(0,0,0,0.5)",
-                }}
-                onClick={() => onLabelClick(label.id)}
+                variant="ghost"
+                color="#1976d2"
+                textTransform="uppercase"
+                fontWeight="500"
               >
-                {label.name}
-              </Tag>
-            );
-          })}
-        </Box>
-        <Box px={2} pb={2} textAlign="left">
-          <Button
-            as={game.link ? "a" : undefined}
-            href={game.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            size="sm" variant="ghost" color="#1976d2" textTransform="uppercase" fontWeight="500">
-            View
-          </Button>
-        </Box>
+                View
+              </Button>
+            )}
+          </Box>
+          {game.description_short && (
+            <Tooltip label={game.description_short} hasArrow placement="top" whiteSpace="pre-line">
+              <span>
+                <Icon as={MdStickyNote2} w={5} h={5} mr={2} color="rgba(0,0,0,0.54)" display="block" />
+              </span>
+            </Tooltip>
+          )}
+        </Flex>
       </Box>
     </ScaleFade>
   );
 }
 
 export default GameCard;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
