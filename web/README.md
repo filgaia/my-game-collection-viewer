@@ -1,23 +1,50 @@
-# My Game collection Viewer!
+﻿# My Game collection Viewer!
+
+![Cover](public/images/cover.png)
+
+## Introduction
+
+This project uses the following technologies:
+
+- React Hooks
+- TypeScript
+- Chakra UI
+- Vite (dev server and build)
+- Vitest + Testing Library (tests)
+
+## Getting Started
+
+Use Node.js 22 and npm. If you use nvm, select the version pinned in `.nvmrc` from this directory:
+
+```sh
+nvm use
+```
+
+From this directory, install dependencies and start the development server:
+
+```sh
+npm i
+npm start
+```
 
 ## Available Scripts
 
-- `npm start` - [http://localhost:3000](http://localhost:3000)
-- `npm test` - [running tests](https://facebook.github.io/create-react-app/docs/running-tests).
-- `npm build` - [deployment](https://facebook.github.io/create-react-app/docs/deployment).
+- `npm start` - Starts the Vite dev server at [http://localhost:3000](http://localhost:3000).
+- `npm test` - Runs tests in watch mode ([Vitest](https://vitest.dev/)).
+- `npm run test:coverage` - Runs the tests once and collects coverage.
+- `npm run build` - Type-checks and creates a production build in `build/`.
+- `npm run preview` - Serves the production build locally.
 
-### Clean cache for deployment
+## Testing
 
-`rm -rf node_modules/gh-pages/.cache`
+- Place `debugger;` statements in any test and run:
 
-### Getting your Google Client API Key
+`npm run test:debug`
 
-Generate one in the [API Console](https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid)
+- This starts Vitest in a single worker and pauses before executing so a debugger can attach.
+- Open `chrome://inspect` in Chrome and select **inspect** on the process.
 
 ## Links of interest
 
-- [Material UI](https://material-ui.com/)
-- [Material Design: Icons](https://material.io/tools/icons/)
-- [React Font Awesome 5](https://github.com/FortAwesome/react-fontawesome)
-- [Font Awesome Icons](https://fontawesome.com/icons?d=gallery&m=free)
-- [Font Awesome Sizing Icons](https://fontawesome.com/how-to-use/on-the-web/styling/sizing-icons)
+- [Chackra UI](https://chakra-ui.com/)
+- [React Icons](https://react-icons.github.io/react-icons)

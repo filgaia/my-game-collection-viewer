@@ -11,9 +11,6 @@ coverage
 # production
 build
 
-# Secret keys
-web/src/data/keys.json
-
 # misc
 .DS_Store
 .env.local

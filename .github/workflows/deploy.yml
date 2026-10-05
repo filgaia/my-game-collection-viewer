@@ -8,29 +8,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
+        uses: actions/checkout@v4
 
-    #  - name: Set node version 🏪
-    #    uses: actions/setup-node@v2
-    #     with:
-    #      node-version: '12'
-
-      - name: Create JSON 🔖
-        id: create-json
-        uses: jsdaniell/create-json@1.1.2
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          name: "keys.json"
-          json: ${{ secrets.GOOGLE_CLIENT_ID }}
-          dir: "web/src/data"
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
 
       - name: Install and Build 🔧
         working-directory: ./web
         run: |
-          npm i
+          npm ci
           npm run build
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@4.1.5
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: docs # The folder the action should deploy.
+          folder: web/build # The folder the action should deploy.
