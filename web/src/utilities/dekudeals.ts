@@ -1,4 +1,4 @@
-﻿import { IGame, ILabel, IPlatform } from "../models/gamesModel";
+import { IGame, ILabel, IPlatform } from "../models/gamesModel";
 
 interface DekuItem {
   name: string;
@@ -108,30 +108,69 @@ export const fetchDekuDealsGames = async (
   };
 };
 
+const IMAGE_STORAGE_KEY = "dekudeals-covers";
 const imageCache = new Map<string, Promise<string | null>>();
+const stored: Record<string, string> = (() => {
+  try {
+    return JSON.parse(localStorage.getItem(IMAGE_STORAGE_KEY) || "{}");
+  } catch {
+    return {};
+  }
+})();
 
-// Production: name -> image URL map generated at build time (scripts/prefetch-images.mjs)
-let staticImages: Promise<Record<string, string>> | null = null;
-const getStaticImages = () => {
-  staticImages ??= fetch(`${API_BASE}/steamgriddb.json`)
-    .then((r) => (r.ok ? r.json() : {}))
-    .catch(() => ({}));
-  return staticImages;
+// Limits parallel item-page requests so the CORS proxy is not flooded
+let running = 0;
+const waiting: Array<() => void> = [];
+const throttled = async <T>(task: () => Promise<T>): Promise<T> => {
+  if (running >= 3) await new Promise<void>((resolve) => waiting.push(resolve));
+  running++;
+  try {
+    return await task();
+  } finally {
+    running--;
+    waiting.shift()?.();
+  }
 };
 
-export const fetchGameImage = (name: string): Promise<string | null> => {
-  if (!imageCache.has(name)) {
+const proxied = (path: string) =>
+  import.meta.env.DEV
+    ? `${API_BASE}/dekudeals/${path}`
+    : `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://www.dekudeals.com/${path}`)}`;
+
+const ITEM_LINK = /^https:\/\/www\.dekudeals\.com\/(items\/[A-Za-z0-9-]+)$/;
+
+// Unlock targets have no link: the first Deku Deals search result for the name is used
+const searchItemPath = async (name: string): Promise<string | null> => {
+  const response = await fetch(proxied(`search?q=${encodeURIComponent(name)}`));
+  if (!response.ok) return null;
+  return (await response.text()).match(/href=['"]\/(items\/[A-Za-z0-9-]+)['"]/)?.[1] ?? null;
+};
+
+// Cover = og:image of the game's Deku Deals page (hosted on cdn.dekudeals.com, loads in <img> without CORS)
+export const fetchGameImage = (link?: string, name?: string): Promise<string | null> => {
+  const cacheKey = link || (name ? `search:${name.toLowerCase()}` : "");
+  if (!cacheKey) return Promise.resolve(null);
+  if (stored[cacheKey]) return Promise.resolve(stored[cacheKey]);
+  if (!imageCache.has(cacheKey)) {
     imageCache.set(
-      name,
-      import.meta.env.DEV
-        ? fetch(`${API_BASE}/steamgriddb/grid?name=${encodeURIComponent(name)}`)
-            .then((r) => (r.ok ? r.json() : null))
-            .then((data) => data?.url ?? null)
-            .catch(() => null)
-        : getStaticImages().then((map) => map[name] ?? null)
+      cacheKey,
+      throttled(async () => {
+        const path = link ? link.match(ITEM_LINK)?.[1] : await searchItemPath(name!);
+        if (!path) return null;
+        const response = await fetch(proxied(path));
+        if (!response.ok) return null;
+        const html = await response.text();
+        const url = html.match(/<meta[^>]*property=['"]og:image['"][^>]*>/)?.[0].match(/content=['"]([^'"]+)['"]/)?.[1];
+        if (url?.startsWith("https://cdn.dekudeals.com/")) {
+          stored[cacheKey] = url;
+          try {
+            localStorage.setItem(IMAGE_STORAGE_KEY, JSON.stringify(stored));
+          } catch {}
+          return url;
+        }
+        return null;
+      }).catch(() => null)
     );
   }
-  return imageCache.get(name)!;
+  return imageCache.get(cacheKey)!;
 };
-
-

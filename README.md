@@ -35,10 +35,13 @@ No login or cookie is needed. If the data cannot be loaded (no key, invalid key)
 
 Next to the **Total** count there is a **Load your own collection** field: paste a share key (or a Deku Deals collection/wishlist URL) and press **Load!** to view someone else's lists. If it fails, the current data stays.
 
-Deku Deals and SteamGridDB don't send CORS headers, so the browser can't call them directly:
 
-- **Dev (`npm start`)**: a Vite middleware ([web/devApi.ts](web/devApi.ts)) proxies Deku Deals and SteamGridDB (keeping the SteamGridDB key out of the browser).
-- **Production (GitHub Pages)**: Deku Deals lists go through the public CORS proxy `api.allorigins.win`. Cover images are resolved at build time by [web/scripts/prefetch-images.mjs](web/scripts/prefetch-images.mjs) into a static `api/steamgriddb.json` map, so covers only appear for games in the default collection/wishlist, not for custom ones loaded at runtime.
+Deku Deals sends no CORS headers, so the browser can't call it directly:
+
+- **Dev (`npm start`)**: a Vite middleware ([web/devApi.ts](web/devApi.ts)) proxies the Deku Deals lists and item pages.
+- **Production (GitHub Pages)**: requests go through the public CORS proxy `api.allorigins.win`.
+
+Game covers come from each game's Deku Deals page (its `og:image`, hosted on `cdn.dekudeals.com`), so they work for any share key and need no API key. They are looked up lazily as cards appear and cached in `localStorage`. Games without a Deku Deals link show a placeholder.
 
 ### Local setup
 
@@ -46,7 +49,4 @@ Create a git-ignored `web/.env.local`:
 
 ```
 VITE_DEKUDEALS_KEY=<your Deku Deals share key>
-STEAMGRIDDB_API_KEY=<your SteamGridDB API key>
 ```
-
-You can generate your SteamGridDB API key here: https://www.steamgriddb.com/profile/preferences

@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Box, Button, Flex, Icon, ScaleFade, Tag, Text, Tooltip } from "@chakra-ui/react";
 import { MdStickyNote2 } from "react-icons/md";
 import { tagCodeToColor } from "../../utilities/index";
@@ -42,7 +42,7 @@ function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardP
         boxShadow="0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)"
       >
         <Box position="relative">
-          <GameCover name={game.name} imageUrl={game.image_url_medium} />
+          <GameCover name={game.name} imageUrl={game.image_url_medium} link={game.link} />
           <Flex position="absolute" top={2} right={2} gap={1} maxW="calc(100% - 16px)" flexWrap="wrap" justify="flex-end">
             {game.labels?.map((label) => {
               const selected = idLabelFilter === label.id;

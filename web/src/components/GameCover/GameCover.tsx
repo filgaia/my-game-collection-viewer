@@ -6,10 +6,11 @@ import { fetchGameImage } from "../../utilities/dekudeals";
 interface GameCoverProps {
   name: string;
   imageUrl?: string;
+  link?: string;
 }
 
 // 16:9 cover with a loading spinner and the placeholder when the image is missing or broken
-function GameCover({ name, imageUrl }: GameCoverProps) {
+function GameCover({ name, imageUrl, link }: GameCoverProps) {
   const [gridImage, setGridImage] = React.useState<string | null>(null);
   const [lookingUp, setLookingUp] = React.useState(!imageUrl);
   const [loaded, setLoaded] = React.useState(false);
@@ -19,7 +20,7 @@ function GameCover({ name, imageUrl }: GameCoverProps) {
     if (imageUrl) return;
     let active = true;
     setLookingUp(true);
-    fetchGameImage(name).then((url) => {
+    fetchGameImage(link, name).then((url) => {
       if (!active) return;
       setGridImage(url);
       setLookingUp(false);
@@ -27,7 +28,7 @@ function GameCover({ name, imageUrl }: GameCoverProps) {
     return () => {
       active = false;
     };
-  }, [name, imageUrl]);
+  }, [link, name, imageUrl]);
 
   const src = imageUrl || gridImage || undefined;
   const showSpinner = lookingUp || (!!src && !failed && !loaded);
