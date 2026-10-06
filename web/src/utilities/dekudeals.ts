@@ -39,19 +39,28 @@ const listUrl = (kind: string, key: string) =>
         `https://www.dekudeals.com/${kind}/${key}.json`
       )}`;
 
-const fetchItems = async (kind: string, key: string): Promise<DekuItem[]> => {
-  const file = `${kind}/${key}`;
-  const response = await fetch(listUrl(kind, key));
-  const type = response.headers.get("content-type") || "";
-  if (!response.ok || !type.includes("json")) {
-    throw new Error(`Deku Deals ${file} unavailable`);
+// The public proxy is flaky: short timeout and a few retries instead of hanging
+const fetchLive = async (kind: string, key: string): Promise<DekuItem[]> => {
+  let lastError: unknown = new Error(`Deku Deals ${kind}/${key} unavailable`);
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const response = await fetch(listUrl(kind, key), { signal: AbortSignal.timeout(10000) });
+      const type = response.headers.get("content-type") || "";
+      if (response.status === 404) throw new Error(`Deku Deals ${kind}/${key} not found`);
+      if (response.ok && type.includes("json")) {
+        const { items } = await response.json();
+        if (Array.isArray(items)) return items;
+      }
+    } catch (e) {
+      lastError = e;
+      if (e instanceof Error && e.message.includes("not found")) throw e;
+    }
+    await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
   }
-  const { items } = await response.json();
-  if (!Array.isArray(items)) {
-    throw new Error(`Deku Deals ${file} has an unexpected shape`);
-  }
-  return items;
+  throw lastError;
 };
+
+const fetchItems = fetchLive;
 
 const toGame = (
   item: DekuItem,
@@ -118,15 +127,6 @@ const stored: Record<string, string> = (() => {
   }
 })();
 
-// Covers resolved at build time for the default share key (see scripts/prefetch-covers.mjs)
-let prebuilt: Promise<Record<string, string>> | null = null;
-const getPrebuilt = () => {
-  prebuilt ??= fetch(`${import.meta.env.BASE_URL}covers.json`)
-    .then((r) => (r.ok && (r.headers.get("content-type") || "").includes("json") ? r.json() : {}))
-    .catch(() => ({}));
-  return prebuilt;
-};
-
 // Limits parallel requests so the public CORS proxy is not flooded
 let running = 0;
 const waiting: Array<() => void> = [];
@@ -186,21 +186,18 @@ const lookupCover = async (cacheKey: string, link?: string, name?: string): Prom
   return url;
 };
 
-// Cover = og:image of the game's Deku Deals page (hosted on cdn.dekudeals.com, loads in <img> without CORS)
+// Cover = og:image of the game's Deku Deals page (hosted on cdn.dekudeals.com, loads in <img> without CORS).
+// Resolves null when the game has no cover; rejects on transient failures (not cached), so callers can retry.
 export const fetchGameImage = (link?: string, name?: string): Promise<string | null> => {
   const cacheKey = link || (name ? `search:${name.toLowerCase()}` : "");
   if (!cacheKey) return Promise.resolve(null);
   if (stored[cacheKey]) return Promise.resolve(stored[cacheKey]);
   if (!imageCache.has(cacheKey)) {
-    const result = getPrebuilt().then(
-      (map) =>
-        map[cacheKey] ??
-        throttled(() => lookupCover(cacheKey, link, name)).catch((e) => {
-          // Transient failures are not cached, so the next render retries
-          if (!(e instanceof NotFound)) imageCache.delete(cacheKey);
-          return null;
-        })
-    );
+    const result = throttled(() => lookupCover(cacheKey, link, name)).catch((e) => {
+      if (e instanceof NotFound) return null;
+      imageCache.delete(cacheKey);
+      throw e;
+    });
     imageCache.set(cacheKey, result);
   }
   return imageCache.get(cacheKey)!;

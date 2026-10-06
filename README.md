@@ -41,12 +41,7 @@ Deku Deals sends no CORS headers, so the browser can't call it directly:
 - **Dev (`npm start`)**: a Vite middleware ([web/devApi.ts](web/devApi.ts)) proxies the Deku Deals lists and item pages.
 - **Production (GitHub Pages)**: requests go through the public CORS proxy `api.allorigins.win`.
 
-Game covers come from each game's Deku Deals page (its `og:image`, hosted on `cdn.dekudeals.com`) and need no API key:
-
-- **Default share key**: covers (including games only mentioned in "Unlocks" notes) are resolved at build time by [web/scripts/prefetch-covers.mjs](web/scripts/prefetch-covers.mjs) into a static `covers.json`, so they load instantly. The build step takes a few minutes because Deku Deals rate-limits requests.
-- **Custom keys** (Load your own): covers are looked up in the browser as cards appear, through the public CORS proxy, with a timeout, retries, and a `localStorage` cache. This is slower and can fail when the proxy is down; failures are retried on the next render.
-
-Games Deku Deals doesn't have show a placeholder.
+Game covers come from each game's Deku Deals page (its `og:image`, hosted on `cdn.dekudeals.com`) and need no API key. They are looked up in the browser as cards appear (for games only mentioned in "Unlocks" notes, the first Deku Deals search result is used), through the public CORS proxy, with a timeout, a few automatic retries, and a `localStorage` cache. The proxy is free and can be flaky: when a lookup fails, the card shows a **retry** button over the cover. Games Deku Deals doesn't have show a placeholder.
 
 ### Local setup
 

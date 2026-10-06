@@ -20,4 +20,3 @@ __snapshots__
 .env.production.local
 
 npm-debug.log*
-public/covers.json

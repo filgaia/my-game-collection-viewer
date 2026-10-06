@@ -8,7 +8,6 @@
     },
     "scripts": {
         "start": "vite",
-        "prebuild": "node --experimental-strip-types scripts/prefetch-covers.mjs",
         "build": "tsc --noEmit && vite build",
         "preview": "vite preview",
         "test": "vitest",
