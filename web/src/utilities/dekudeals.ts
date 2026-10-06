@@ -118,11 +118,20 @@ const stored: Record<string, string> = (() => {
   }
 })();
 
-// Limits parallel item-page requests so the CORS proxy is not flooded
+// Covers resolved at build time for the default share key (see scripts/prefetch-covers.mjs)
+let prebuilt: Promise<Record<string, string>> | null = null;
+const getPrebuilt = () => {
+  prebuilt ??= fetch(`${import.meta.env.BASE_URL}covers.json`)
+    .then((r) => (r.ok && (r.headers.get("content-type") || "").includes("json") ? r.json() : {}))
+    .catch(() => ({}));
+  return prebuilt;
+};
+
+// Limits parallel requests so the public CORS proxy is not flooded
 let running = 0;
 const waiting: Array<() => void> = [];
 const throttled = async <T>(task: () => Promise<T>): Promise<T> => {
-  if (running >= 3) await new Promise<void>((resolve) => waiting.push(resolve));
+  if (running >= 4) await new Promise<void>((resolve) => waiting.push(resolve));
   running++;
   try {
     return await task();
@@ -137,13 +146,44 @@ const proxied = (path: string) =>
     ? `${API_BASE}/dekudeals/${path}`
     : `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://www.dekudeals.com/${path}`)}`;
 
+// The public proxy is flaky: short timeout and a few retries. Returns null on a definitive 404.
+const fetchText = async (path: string): Promise<string> => {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const response = await fetch(proxied(path), { signal: AbortSignal.timeout(8000) });
+      if (response.ok) return await response.text();
+      if (response.status === 404) throw new NotFound();
+      lastError = new Error(String(response.status));
+    } catch (e) {
+      if (e instanceof NotFound) throw e;
+      lastError = e;
+    }
+    await new Promise((r) => setTimeout(r, 400 * (attempt + 1)));
+  }
+  throw lastError;
+};
+
+class NotFound extends Error {}
+
 const ITEM_LINK = /^https:\/\/www\.dekudeals\.com\/(items\/[A-Za-z0-9-]+)$/;
 
 // Unlock targets have no link: the first Deku Deals search result for the name is used
-const searchItemPath = async (name: string): Promise<string | null> => {
-  const response = await fetch(proxied(`search?q=${encodeURIComponent(name)}`));
-  if (!response.ok) return null;
-  return (await response.text()).match(/href=['"]\/(items\/[A-Za-z0-9-]+)['"]/)?.[1] ?? null;
+const searchItemPath = async (name: string): Promise<string | null> =>
+  (await fetchText(`search?q=${encodeURIComponent(name)}`)).match(/href=['"]\/(items\/[A-Za-z0-9-]+)['"]/)?.[1] ?? null;
+
+const lookupCover = async (cacheKey: string, link?: string, name?: string): Promise<string | null> => {
+  const path = link ? link.match(ITEM_LINK)?.[1] : await searchItemPath(name!);
+  if (!path) return null;
+  const html = await fetchText(path);
+  const tag = html.match(/<meta[^>]*property=['"]og:image['"][^>]*>/)?.[0];
+  const url = tag?.match(/content=['"]([^'"]+)['"]/)?.[1];
+  if (!url?.startsWith("https://cdn.dekudeals.com/")) return null;
+  stored[cacheKey] = url;
+  try {
+    localStorage.setItem(IMAGE_STORAGE_KEY, JSON.stringify(stored));
+  } catch {}
+  return url;
 };
 
 // Cover = og:image of the game's Deku Deals page (hosted on cdn.dekudeals.com, loads in <img> without CORS)
@@ -152,25 +192,16 @@ export const fetchGameImage = (link?: string, name?: string): Promise<string | n
   if (!cacheKey) return Promise.resolve(null);
   if (stored[cacheKey]) return Promise.resolve(stored[cacheKey]);
   if (!imageCache.has(cacheKey)) {
-    imageCache.set(
-      cacheKey,
-      throttled(async () => {
-        const path = link ? link.match(ITEM_LINK)?.[1] : await searchItemPath(name!);
-        if (!path) return null;
-        const response = await fetch(proxied(path));
-        if (!response.ok) return null;
-        const html = await response.text();
-        const url = html.match(/<meta[^>]*property=['"]og:image['"][^>]*>/)?.[0].match(/content=['"]([^'"]+)['"]/)?.[1];
-        if (url?.startsWith("https://cdn.dekudeals.com/")) {
-          stored[cacheKey] = url;
-          try {
-            localStorage.setItem(IMAGE_STORAGE_KEY, JSON.stringify(stored));
-          } catch {}
-          return url;
-        }
-        return null;
-      }).catch(() => null)
+    const result = getPrebuilt().then(
+      (map) =>
+        map[cacheKey] ??
+        throttled(() => lookupCover(cacheKey, link, name)).catch((e) => {
+          // Transient failures are not cached, so the next render retries
+          if (!(e instanceof NotFound)) imageCache.delete(cacheKey);
+          return null;
+        })
     );
+    imageCache.set(cacheKey, result);
   }
   return imageCache.get(cacheKey)!;
 };

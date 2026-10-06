@@ -20,4 +20,4 @@ __snapshots__
 .env.production.local
 
 npm-debug.log*
-public/api/steamgriddb.json
+public/covers.json

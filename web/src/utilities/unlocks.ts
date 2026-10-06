@@ -1,4 +1,4 @@
-import { IGame } from "../models/gamesModel";
+import type { IGame } from "../models/gamesModel";
 
 export interface UnlockTarget {
   name: string;
