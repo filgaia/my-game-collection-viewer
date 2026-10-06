@@ -52,13 +52,13 @@ const sgdb = async (path) => {
   return data ?? [];
 };
 
-// Wide grids (closest to the 16:9 card) first, any static grid otherwise; results come sorted by score
+// Only wide grids (the card's 920x430 ratio) so nothing is badly cropped; games without one use the live Deku Deals cover
 const findCover = async (name) => {
   const game = pickGame(await sgdb(`/search/autocomplete/${encodeURIComponent(normalizeName(name))}`), name);
   if (!game) return null;
-  const query = "nsfw=false&humor=false&types=static";
-  const wide = await sgdb(`/grids/game/${game.id}?${query}&dimensions=920x430,460x215`);
-  const grids = wide.length ? wide : await sgdb(`/grids/game/${game.id}?${query}`);
+  const grids = await sgdb(
+    `/grids/game/${game.id}?nsfw=false&humor=false&types=static&dimensions=920x430,460x215`
+  );
   return grids[0]?.url ?? null;
 };
 

@@ -10,7 +10,10 @@ interface GameCoverProps {
   link?: string;
 }
 
-// 16:9 cover with a loading spinner, a retry button when the lookup fails, and the placeholder when there is no image
+// SteamGridDB wide grid size (920x430 / 460x215)
+export const COVER_RATIO = 920 / 430;
+
+// Wide cover with a loading spinner, a retry button when the lookup fails, and the placeholder when there is no image
 function GameCover({ name, imageUrl, link }: GameCoverProps) {
   const [gridImage, setGridImage] = React.useState<string | null>(null);
   const [lookingUp, setLookingUp] = React.useState(!imageUrl);
@@ -42,7 +45,7 @@ function GameCover({ name, imageUrl, link }: GameCoverProps) {
   }, [src]);
 
   return (
-    <AspectRatio ratio={16 / 9}>
+    <AspectRatio ratio={COVER_RATIO}>
       <Box position="relative" w="100%" h="100%">
         <Image
           src={src && !failed ? src : ERROR_IMAGE}

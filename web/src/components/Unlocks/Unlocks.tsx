@@ -36,7 +36,7 @@ const OWNED_LABEL: ILabel = { id: 9001, name: "Owned", background_color: 0x81c78
 const WISHLIST_LABEL: ILabel = { id: 9002, name: "Wishlist", background_color: 0xf06292 };
 
 const NODE_WIDTH = 240;
-const NODE_HEIGHT = 230; // GameCard height: 16:9 cover + title + footer
+const NODE_HEIGHT = 207; // GameCard height: wide (920x430) cover + title + footer
 const COLUMN_GAP = 140;
 const ROW_GAP = 30;
 const GROUP_GAP = 60;
