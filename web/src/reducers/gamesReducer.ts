@@ -33,6 +33,12 @@ function gamesReducer(state: ICatalog, action: IActionType): ICatalog {
       return {
         ...state,
         loading: false,
+        games: [],
+        wishList: [],
+        hasMoreItems: true,
+        hasMoreItemsWishList: true,
+        idLabelFilter: null,
+        sourceFiltered: [],
         source: get(action, "payload.response.games", []),
         sourceWishList: get(action, "payload.response.gamesInWishList", []),
         labels: get(action, "payload.response.labels", []),

@@ -3,16 +3,14 @@ import { loadEnv } from "vite";
 import SGDB from "steamgriddb";
 
 const DEKU_ORIGIN = "https://www.dekudeals.com";
-const DEKU_PATHS = ["collection.json", "wishlist.json"];
 
-// Dev-only middleware: forwards the Deku Deals session cookie and hides the SteamGridDB key.
+// Dev-only middleware: proxies the public Deku Deals lists (no CORS) and hides the SteamGridDB key.
 export default function devApi(): Plugin {
   return {
     name: "dev-api",
     apply: "serve",
     configureServer(server) {
       const env = loadEnv(server.config.mode, server.config.envDir || server.config.root, "");
-      const cookie = env.DEKUDEALS_COOKIE;
       const grid = env.STEAMGRIDDB_API_KEY ? new SGDB(env.STEAMGRIDDB_API_KEY) : null;
       const imageCache = new Map<string, string | null>();
 
@@ -29,14 +27,13 @@ export default function devApi(): Plugin {
 
         try {
           if (match[1] === "dekudeals") {
-            if (!cookie || !DEKU_PATHS.includes(match[2])) return send(res, 404, {});
-            const response = await fetch(`${DEKU_ORIGIN}/${match[2]}`, {
-              headers: { Cookie: cookie, Accept: "application/json" },
-              redirect: "manual",
+            const deku = match[2].match(/^(collection|wishlist)\/([A-Za-z0-9]+)\.json$/);
+            if (!deku) return send(res, 404, {});
+            const response = await fetch(`${DEKU_ORIGIN}/${deku[1]}/${deku[2]}.json`, {
+              headers: { Accept: "application/json" },
             });
             const type = response.headers.get("content-type") || "";
-            // A redirect (to the login page) means the session is missing or expired
-            if (!response.ok || !type.includes("json")) return send(res, 401, {});
+            if (!response.ok || !type.includes("json")) return send(res, response.status === 404 ? 404 : 502, {});
             res.setHeader("Content-Type", "application/json");
             res.end(await response.text());
             return;

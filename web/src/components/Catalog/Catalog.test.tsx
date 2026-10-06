@@ -22,6 +22,7 @@ describe("Catalog", () => {
             labels: [{ id: 7, name: "PS3", background_color: -16529089 }],
           },
         ]}
+        total={42}
         platforms={[{ id: 1, name: "Playstation 3" }]}
         hasMoreItems={false}
         loading={false}
@@ -36,6 +37,7 @@ describe("Catalog", () => {
     expect(wrapper.container.querySelector("svg")).toBeInTheDocument();
     expect(wrapper.queryByText("Description")).not.toBeInTheDocument(); // note only shows on hover
     expect(wrapper.getByText("PS3")).toBeInTheDocument();
+    expect(wrapper.getByText("Total: 42")).toBeInTheDocument();
   });
 
   it("filters by label when clicking its tag", () => {

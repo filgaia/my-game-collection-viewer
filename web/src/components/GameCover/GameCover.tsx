@@ -50,7 +50,7 @@ function GameCover({ name, imageUrl }: GameCoverProps) {
           objectFit="cover"
         />
         {showSpinner && (
-          <Center position="absolute" inset={0} bg="rgba(255,255,255,0.7)">
+          <Center position="absolute" inset={0} bg="rgba(255,255,255,0.7)" _dark={{ bg: "rgba(26,32,44,0.7)" }}>
             <Spinner color="#1976d2" />
           </Center>
         )}

@@ -36,6 +36,7 @@ function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardP
         flexDirection="column"
         h="100%"
         bg="white"
+        _dark={{ bg: "gray.700" }}
         borderRadius="4px"
         overflow="hidden"
         boxShadow="0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)"
@@ -73,7 +74,7 @@ function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardP
         </Box>
         <Box p={4}>
           <Tooltip label={game.name} isDisabled={!truncated} hasArrow placement="top-start">
-            <Text ref={titleRef} fontSize="xl" lineHeight="1.334" isTruncated color="rgba(0,0,0,0.87)">
+            <Text ref={titleRef} fontSize="xl" lineHeight="1.334" isTruncated color="rgba(0,0,0,0.87)" _dark={{ color: "whiteAlpha.900" }}>
               {game.name}
             </Text>
           </Tooltip>
@@ -89,6 +90,7 @@ function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardP
                 size="sm"
                 variant="ghost"
                 color="#1976d2"
+                _dark={{ color: "blue.200" }}
                 textTransform="uppercase"
                 fontWeight="500"
               >
@@ -99,7 +101,7 @@ function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardP
           {game.description_short && (
             <Tooltip label={game.description_short} hasArrow placement="top" whiteSpace="pre-line">
               <span>
-                <Icon as={MdStickyNote2} w={5} h={5} mr={2} color="rgba(0,0,0,0.54)" display="block" />
+                <Icon as={MdStickyNote2} w={5} h={5} mr={2} color="rgba(0,0,0,0.54)" _dark={{ color: "whiteAlpha.700" }} display="block" />
               </span>
             </Tooltip>
           )}

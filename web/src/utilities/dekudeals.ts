@@ -29,8 +29,19 @@ const getStatusLabel = (status: string | undefined, labels: ILabel[]): ILabel | 
   return label;
 };
 
-const fetchItems = async (file: string): Promise<DekuItem[]> => {
-  const response = await fetch(`${API_BASE}/dekudeals/${file}`, { credentials: "include" });
+export const DEFAULT_SHARE_KEY: string = import.meta.env.VITE_DEKUDEALS_KEY || "";
+
+// Deku Deals sends no CORS headers: dev uses the Vite proxy, production a public CORS proxy
+const listUrl = (kind: string, key: string) =>
+  import.meta.env.DEV
+    ? `${API_BASE}/dekudeals/${kind}/${key}.json`
+    : `https://api.allorigins.win/raw?url=${encodeURIComponent(
+        `https://www.dekudeals.com/${kind}/${key}.json`
+      )}`;
+
+const fetchItems = async (kind: string, key: string): Promise<DekuItem[]> => {
+  const file = `${kind}/${key}`;
+  const response = await fetch(listUrl(kind, key));
   const type = response.headers.get("content-type") || "";
   if (!response.ok || !type.includes("json")) {
     throw new Error(`Deku Deals ${file} unavailable`);
@@ -72,16 +83,19 @@ const toGame = (
   };
 };
 
-// Loads the logged-in Deku Deals collection and wishlist. Rejects when either is unavailable.
-export const fetchDekuDealsGames = async (): Promise<{
+// Loads the public Deku Deals collection and wishlist for a share key. Rejects when either is unavailable.
+export const fetchDekuDealsGames = async (
+  key: string = DEFAULT_SHARE_KEY
+): Promise<{
   games: IGame[];
   gamesInWishList: IGame[];
   labels: ILabel[];
   platforms: IPlatform[];
 }> => {
+  if (!/^[A-Za-z0-9]+$/.test(key)) throw new Error("Invalid share key");
   const [collection, wishlist] = await Promise.all([
-    fetchItems("collection.json"),
-    fetchItems("wishlist.json"),
+    fetchItems("collection", key),
+    fetchItems("wishlist", key),
   ]);
   const platforms: IPlatform[] = [];
   const labels: ILabel[] = [];
@@ -96,14 +110,25 @@ export const fetchDekuDealsGames = async (): Promise<{
 
 const imageCache = new Map<string, Promise<string | null>>();
 
+// Production: name -> image URL map generated at build time (scripts/prefetch-images.mjs)
+let staticImages: Promise<Record<string, string>> | null = null;
+const getStaticImages = () => {
+  staticImages ??= fetch(`${API_BASE}/steamgriddb.json`)
+    .then((r) => (r.ok ? r.json() : {}))
+    .catch(() => ({}));
+  return staticImages;
+};
+
 export const fetchGameImage = (name: string): Promise<string | null> => {
   if (!imageCache.has(name)) {
     imageCache.set(
       name,
-      fetch(`${API_BASE}/steamgriddb/grid?name=${encodeURIComponent(name)}`)
-        .then((r) => (r.ok ? r.json() : null))
-        .then((data) => data?.url ?? null)
-        .catch(() => null)
+      import.meta.env.DEV
+        ? fetch(`${API_BASE}/steamgriddb/grid?name=${encodeURIComponent(name)}`)
+            .then((r) => (r.ok ? r.json() : null))
+            .then((data) => data?.url ?? null)
+            .catch(() => null)
+        : getStaticImages().then((map) => map[name] ?? null)
     );
   }
   return imageCache.get(name)!;

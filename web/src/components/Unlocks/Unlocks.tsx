@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Box, Tag, Text } from "@chakra-ui/react";
+import { Box, Tag, Text, useColorMode } from "@chakra-ui/react";
 import {
   Background,
   Controls,
@@ -102,6 +102,7 @@ function useAvailableHeight(ref: React.RefObject<HTMLElement>) {
 
 function Unlocks({ collection, wishlist, platforms }: UnlocksProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const { colorMode } = useColorMode();
   const height = useAvailableHeight(containerRef);
   const columns = useColumns();
   const { nodes, edges, extent } = React.useMemo(() => {
@@ -181,15 +182,16 @@ function Unlocks({ collection, wishlist, platforms }: UnlocksProps) {
 
   if (nodes.length === 0) {
     return (
-      <Text textAlign="center" color="rgba(0,0,0,0.6)">
+      <Text textAlign="center" color="rgba(0,0,0,0.6)" _dark={{ color: "whiteAlpha.700" }}>
         No games with an "Unlocks" note were found.
       </Text>
     );
   }
 
   return (
-    <Box ref={containerRef} h={`${height}px`} bg="white" borderRadius="4px">
+    <Box ref={containerRef} h={`${height}px`} bg="white" _dark={{ bg: "gray.700" }} borderRadius="4px">
       <ReactFlow
+        colorMode={colorMode}
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}

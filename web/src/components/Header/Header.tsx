@@ -1,12 +1,15 @@
 import React from "react";
-import { Flex, Heading, Icon, IconButton, Tooltip } from "@chakra-ui/react";
-import { MdGames, MdSortByAlpha } from "react-icons/md";
+import { Flex, Heading, Icon, IconButton, Tooltip, useColorMode } from "@chakra-ui/react";
+import { MdDarkMode, MdGames, MdLightMode, MdSortByAlpha } from "react-icons/md";
 
 interface HeaderProps {
   onSort?: () => void;
 }
 
 function Header({ onSort }: HeaderProps) {
+  const { colorMode, toggleColorMode } = useColorMode();
+  const isDark = colorMode === "dark";
+
   return (
     <Flex
       as="header"
@@ -30,6 +33,16 @@ function Header({ onSort }: HeaderProps) {
           color="inherit"
           _hover={{ bg: "whiteAlpha.200" }}
           onClick={onSort}
+        />
+      </Tooltip>
+      <Tooltip label={isDark ? "Light mode" : "Dark mode"}>
+        <IconButton
+          aria-label="Toggle color mode"
+          icon={<Icon as={isDark ? MdLightMode : MdDarkMode} w={6} h={6} />}
+          variant="ghost"
+          color="inherit"
+          _hover={{ bg: "whiteAlpha.200" }}
+          onClick={toggleColorMode}
         />
       </Tooltip>
     </Flex>

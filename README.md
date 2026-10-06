@@ -27,17 +27,25 @@ The GitHub Pages workflow builds `web/` and deploys its `build/` directory.
 
 ## Data sources (web)
 
-The web app loads your collection and wishlist from the original [Deku Deals](https://www.dekudeals.com/) site:
+The web app loads your collection and wishlist from the public share links of [Deku Deals](https://www.dekudeals.com/). With your share key:
 
-- https://www.dekudeals.com/collection.json
-- https://www.dekudeals.com/wishlist.json
+You can find the sahre key under your collection or wishlist as Share: https://www.dekudeals.com/wishlist/<key> or https://www.dekudeals.com/collection/<key>
 
-These URLs only work if you are **logged in to Deku Deals**, so the app needs your session cookie to load them. Requests go through a dev-only proxy (`npm start`), which forwards the cookie. If the data cannot be loaded (not logged in, expired session, no cookie), the app falls back to `web/src/data/db.json` and the **Unlocks** tab is disabled.
+No login or cookie is needed. If the data cannot be loaded (no key, invalid key), the app falls back to `web/src/data/db.json` and the **Unlocks** tab is disabled.
+
+Next to the **Total** count there is a **Load your own collection** field: paste a share key (or a Deku Deals collection/wishlist URL) and press **Load!** to view someone else's lists. If it fails, the current data stays.
+
+Deku Deals and SteamGridDB don't send CORS headers, so the browser can't call them directly:
+
+- **Dev (`npm start`)**: a Vite middleware ([web/devApi.ts](web/devApi.ts)) proxies Deku Deals and SteamGridDB (keeping the SteamGridDB key out of the browser).
+- **Production (GitHub Pages)**: Deku Deals lists go through the public CORS proxy `api.allorigins.win`. Cover images are resolved at build time by [web/scripts/prefetch-images.mjs](web/scripts/prefetch-images.mjs) into a static `api/steamgriddb.json` map, so covers only appear for games in the default collection/wishlist, not for custom ones loaded at runtime.
+
+### Local setup
 
 Create a git-ignored `web/.env.local`:
 
 ```
-DEKUDEALS_COOKIE=rack.session=<value from your logged-in browser>
+VITE_DEKUDEALS_KEY=<your Deku Deals share key>
 STEAMGRIDDB_API_KEY=<your SteamGridDB API key>
 ```
 
