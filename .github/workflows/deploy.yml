@@ -36,11 +36,27 @@ jobs:
         working-directory: ./web
         run: npx vitest run
 
+      - name: Snapshot lists
+        working-directory: ./web
+        continue-on-error: true
+        env:
+          VITE_DEKUDEALS_KEY: ${{ secrets.VITE_DEKUDEALS_KEY }}
+        run: npm run snapshot:lists
+
+      - name: Snapshot covers
+        working-directory: ./web
+        continue-on-error: true
+        env:
+          SGDB_API_KEY: ${{ secrets.SGDB_API_KEY }}
+          COVERS_PREVIOUS_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/api/snapshot/covers.json
+        run: npm run snapshot:covers
+
+      # --ignore-scripts skips the prebuild hook: both snapshots already ran above, as separate steps
       - name: Build
         working-directory: ./web
         env:
           VITE_DEKUDEALS_KEY: ${{ secrets.VITE_DEKUDEALS_KEY }}
-        run: npm run build
+        run: npm run build --ignore-scripts
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

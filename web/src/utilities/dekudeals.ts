@@ -147,6 +147,22 @@ const stored: Record<string, string> = (() => {
   }
 })();
 
+// Build-time covers (SteamGridDB), keyed by item link or `search:<name>`. Missing or broken: every game uses the live lookup.
+let coverSnapshot: Promise<Record<string, string>> | undefined;
+const loadCoverSnapshot = (): Promise<Record<string, string>> => {
+  coverSnapshot ??= (async () => {
+    try {
+      const response = await fetch(`${API_BASE}/snapshot/covers.json`);
+      if (!response.ok || !(response.headers.get("content-type") || "").includes("json")) return {};
+      const { covers } = await response.json();
+      return covers && typeof covers === "object" ? covers : {};
+    } catch {
+      return {};
+    }
+  })();
+  return coverSnapshot;
+};
+
 // Limits parallel requests so the public CORS proxy is not flooded
 let running = 0;
 const waiting: Array<() => void> = [];
@@ -208,10 +224,12 @@ const lookupCover = async (cacheKey: string, link?: string, name?: string): Prom
 
 // Cover = og:image of the game's Deku Deals page (hosted on cdn.dekudeals.com, loads in <img> without CORS).
 // Resolves null when the game has no cover; rejects on transient failures (not cached), so callers can retry.
-export const fetchGameImage = (link?: string, name?: string): Promise<string | null> => {
+export const fetchGameImage = async (link?: string, name?: string): Promise<string | null> => {
   const cacheKey = link || (name ? `search:${name.toLowerCase()}` : "");
-  if (!cacheKey) return Promise.resolve(null);
-  if (stored[cacheKey]) return Promise.resolve(stored[cacheKey]);
+  if (!cacheKey) return null;
+  const snapshotCover = (await loadCoverSnapshot())[cacheKey];
+  if (snapshotCover) return snapshotCover;
+  if (stored[cacheKey]) return stored[cacheKey];
   if (!imageCache.has(cacheKey)) {
     const result = throttled(() => lookupCover(cacheKey, link, name)).catch((e) => {
       if (e instanceof NotFound) return null;

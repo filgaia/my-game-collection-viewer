@@ -8,7 +8,9 @@
     },
     "scripts": {
         "start": "vite",
-        "prebuild": "node scripts/snapshot-lists.mjs",
+        "snapshot:lists": "node scripts/snapshot-lists.mjs",
+        "snapshot:covers": "node scripts/snapshot-covers.mjs",
+        "prebuild": "npm run snapshot:lists && npm run snapshot:covers",
         "build": "tsc --noEmit && vite build",
         "preview": "vite preview",
         "test": "vitest",

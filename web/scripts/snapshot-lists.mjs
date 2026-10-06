@@ -1,6 +1,10 @@
 // Build-time step: Deku Deals sends no CORS headers, so the share lists are downloaded here and shipped as static JSON.
 // Never fails the build: without a snapshot the app falls back to the live CORS proxy.
 import { mkdir, writeFile } from "node:fs/promises";
+// Local runs: load web/.env.local (Vite does it for the app, not for node scripts); CI sets real env vars
+try {
+  process.loadEnvFile(new URL("../.env.local", import.meta.url));
+} catch {}
 
 const shareKey = process.env.VITE_DEKUDEALS_KEY;
 const outDir = new URL("../public/api/snapshot/", import.meta.url);
