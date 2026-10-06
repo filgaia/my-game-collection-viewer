@@ -1,6 +1,5 @@
-import React from "react";
-import { Box, Button, Flex, Icon, ScaleFade, Tag, Text, Tooltip } from "@chakra-ui/react";
-import { MdStickyNote2 } from "react-icons/md";
+import { Box, Flex, Icon, IconButton, ScaleFade, Tag, Text, Tooltip } from "@chakra-ui/react";
+import { MdOpenInNew, MdStickyNote2 } from "react-icons/md";
 import { tagCodeToColor } from "../../utilities/index";
 import GameCover from "../GameCover/GameCover";
 import PlatformIcon from "../PlatformIcon/PlatformIcon";
@@ -14,21 +13,6 @@ interface GameCardProps {
 }
 
 function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardProps) {
-  const titleRef = React.useRef<HTMLParagraphElement>(null);
-  const [truncated, setTruncated] = React.useState(false);
-
-  // Re-checked on resize so the tooltip only exists while the title is cut off
-  React.useLayoutEffect(() => {
-    const el = titleRef.current;
-    if (!el) return;
-    const check = () => setTruncated(el.scrollWidth > el.clientWidth);
-    check();
-    if (typeof ResizeObserver === "undefined") return;
-    const observer = new ResizeObserver(check);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [game.name]);
-
   return (
     <ScaleFade initialScale={0.9} in style={{ height: "100%" }}>
       <Box
@@ -41,9 +25,29 @@ function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardP
         overflow="hidden"
         boxShadow="0 2px 1px -1px rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.14), 0 1px 3px 0 rgba(0,0,0,0.12)"
       >
-        <Box position="relative">
+        <Box position="relative" overflow="hidden" role="group">
           <GameCover name={game.name} imageUrl={game.image_url_medium} link={game.link} />
-          <Flex position="absolute" top={2} right={2} gap={1} maxW="calc(100% - 16px)" flexWrap="wrap" justify="flex-end">
+          <Box
+            position="absolute"
+            top={0}
+            left={0}
+            right={0}
+            px={3}
+            py={2}
+            bg="blackAlpha.800"
+            color="white"
+            transform="translateY(-100%)"
+            transition="transform 0.25s ease"
+            _groupHover={{ transform: "translateY(0)" }}
+            _groupFocusWithin={{ transform: "translateY(0)" }}
+            pointerEvents="none"
+            zIndex={1}
+          >
+            <Text fontSize="md" fontWeight="500" lineHeight="1.3" noOfLines={2}>
+              {game.name}
+            </Text>
+          </Box>
+          <Flex position="absolute" top={2} right={2} zIndex={2} gap={1} maxW="calc(100% - 16px)" flexWrap="wrap" justify="flex-end">
             {game.labels?.map((label) => {
               const selected = idLabelFilter === label.id;
               return (
@@ -71,42 +75,33 @@ function GameCard({ game, platformName, idLabelFilter, onLabelClick }: GameCardP
           <Box position="absolute" bottom={2} left={2}>
             <PlatformIcon name={platformName} />
           </Box>
-        </Box>
-        <Box p={4}>
-          <Tooltip label={game.name} isDisabled={!truncated} hasArrow placement="top-start">
-            <Text ref={titleRef} fontSize="xl" lineHeight="1.334" isTruncated color="rgba(0,0,0,0.87)" _dark={{ color: "whiteAlpha.900" }}>
-              {game.name}
-            </Text>
-          </Tooltip>
-        </Box>
-        <Flex px={2} pb={2} mt="auto" align="center" justify="space-between">
-          <Box>
-            {game.link && (
-              <Button
-                as="a"
-                href={game.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                size="sm"
-                variant="ghost"
-                color="#1976d2"
-                _dark={{ color: "blue.200" }}
-                textTransform="uppercase"
-                fontWeight="500"
-              >
-                View
-              </Button>
+          <Flex position="absolute" bottom={2} right={2} gap={2} align="center">
+            {game.description_short && (
+              <Tooltip label={game.description_short} hasArrow placement="top" whiteSpace="pre-line">
+                <Flex align="center" justify="center" w={8} h={8} borderRadius="full" color="white" bg="blackAlpha.700" _hover={{ bg: "blackAlpha.900" }}>
+                  <Icon as={MdStickyNote2} w={5} h={5} />
+                </Flex>
+              </Tooltip>
             )}
-          </Box>
-          {game.description_short && (
-            <Tooltip label={game.description_short} hasArrow placement="top" whiteSpace="pre-line">
-              <span>
-                <Icon as={MdStickyNote2} w={5} h={5} mr={2} color="rgba(0,0,0,0.54)" _dark={{ color: "whiteAlpha.700" }} display="block" />
-              </span>
-            </Tooltip>
-          )}
-        </Flex>
-      </Box>
+            {game.link && (
+              <Tooltip label="Open link" hasArrow placement="top">
+                <IconButton
+                  as="a"
+                  href={game.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open ${game.name}`}
+                  icon={<Icon as={MdOpenInNew} w={5} h={5} />}
+                  size="sm"
+                  isRound
+                  color="white"
+                  bg="blackAlpha.700"
+                  _hover={{ bg: "blackAlpha.900" }}
+                />
+              </Tooltip>
+            )}
+          </Flex>
+        </Box>      </Box>
     </ScaleFade>
   );
 }
