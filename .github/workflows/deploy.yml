@@ -31,7 +31,7 @@ jobs:
       - name: Install and Build
         working-directory: ./web
         env:
-          VITE_DEKUDEALS_KEY: ${{ secrets.DEKUDEALS_SHARE_KEY }}
+          VITE_DEKUDEALS_KEY: ${{ secrets.VITE_DEKUDEALS_KEY }}
           STEAMGRIDDB_API_KEY: ${{ secrets.STEAMGRIDDB_API_KEY }}
         run: |
           npm ci
