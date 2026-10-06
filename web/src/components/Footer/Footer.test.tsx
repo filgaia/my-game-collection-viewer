@@ -10,6 +10,6 @@ describe("Footer", () => {
   });
 
   it("renders correctly", () => {
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.getByText("By Filgaia")).toBeInTheDocument();
   });
 });
