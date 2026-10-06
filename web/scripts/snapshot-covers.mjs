@@ -93,6 +93,20 @@ try {
   }
 
   const byKey = new Map(items.map((item) => [coverKey(item), item]));
+
+  // Unlock targets (from the notes) have no link unless they are in the lists: they use the `search:<name>` key
+  try {
+    const { parseUnlocks } = await import("../src/utilities/unlocks.ts");
+    const listed = new Map(items.map((item) => [item.name.toLowerCase(), item]));
+    for (const item of items) {
+      for (const { name } of parseUnlocks(item.note)) {
+        if (listed.get(name.toLowerCase())?.link) continue;
+        byKey.set(coverKey({ name }), { name });
+      }
+    }
+  } catch (e) {
+    console.warn(`covers: unlock targets skipped (${e.message})`);
+  }
   byKey.delete("");
   const { kept, missing, removed } = diffCovers(await loadPrevious(), [...byKey.keys()]);
   console.log(`covers: ${Object.keys(kept).length} kept, ${removed.length} removed, ${missing.length} new`);
