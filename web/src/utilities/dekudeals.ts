@@ -39,12 +39,13 @@ const listUrl = (kind: string, key: string) =>
         `https://www.dekudeals.com/${kind}/${key}.json`
       )}`;
 
-// The public proxy is flaky: short timeout and a few retries instead of hanging
+// The public proxy is flaky: a few retries instead of hanging. The full collection list can take ~10s
+// through the proxy, so the timeout must be generous.
 const fetchLive = async (kind: string, key: string): Promise<DekuItem[]> => {
   let lastError: unknown = new Error(`Deku Deals ${kind}/${key} unavailable`);
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const response = await fetch(listUrl(kind, key), { signal: AbortSignal.timeout(10000) });
+      const response = await fetch(listUrl(kind, key), { signal: AbortSignal.timeout(45000) });
       const type = response.headers.get("content-type") || "";
       if (response.status === 404) throw new Error(`Deku Deals ${kind}/${key} not found`);
       if (response.ok && type.includes("json")) {
@@ -60,7 +61,25 @@ const fetchLive = async (kind: string, key: string): Promise<DekuItem[]> => {
   throw lastError;
 };
 
-const fetchItems = fetchLive;
+// The default share key is snapshotted at build time (static, instant); anything else goes through the live proxy
+const fetchSnapshot = async (kind: string): Promise<DekuItem[] | null> => {
+  try {
+    const response = await fetch(`${API_BASE}/snapshot/${kind}.json`);
+    if (!response.ok || !(response.headers.get("content-type") || "").includes("json")) return null;
+    const { items } = await response.json();
+    return Array.isArray(items) ? items : null;
+  } catch {
+    return null;
+  }
+};
+
+const fetchItems = async (kind: string, key: string, live = false): Promise<DekuItem[]> => {
+  if (!live && !import.meta.env.DEV && DEFAULT_SHARE_KEY && key === DEFAULT_SHARE_KEY) {
+    const snapshot = await fetchSnapshot(kind);
+    if (snapshot) return snapshot;
+  }
+  return fetchLive(kind, key);
+};
 
 const toGame = (
   item: DekuItem,
@@ -94,7 +113,8 @@ const toGame = (
 
 // Loads the public Deku Deals collection and wishlist for a share key. Rejects when either is unavailable.
 export const fetchDekuDealsGames = async (
-  key: string = DEFAULT_SHARE_KEY
+  key: string = DEFAULT_SHARE_KEY,
+  live = false // skip the build-time snapshot
 ): Promise<{
   games: IGame[];
   gamesInWishList: IGame[];
@@ -103,8 +123,8 @@ export const fetchDekuDealsGames = async (
 }> => {
   if (!/^[A-Za-z0-9]+$/.test(key)) throw new Error("Invalid share key");
   const [collection, wishlist] = await Promise.all([
-    fetchItems("collection", key),
-    fetchItems("wishlist", key),
+    fetchItems("collection", key, live),
+    fetchItems("wishlist", key, live),
   ]);
   const platforms: IPlatform[] = [];
   const labels: ILabel[] = [];

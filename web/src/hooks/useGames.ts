@@ -87,23 +87,38 @@ export default function useGames({ reducer = gamesReducer } = {}) {
     });
   };
 
-  // Deku Deals is the source of truth; db.json is used when it cannot be loaded
+  // Deku Deals is the source of truth; db.json is used when it cannot be loaded.
+  // The build-time snapshot shows up fast, then the live list is fetched in the background
+  // and only replaces it when it changed.
   const initRemoteGames = async () => {
+    let snapshot: string | null = null;
     try {
-      await loadShared(DEFAULT_SHARE_KEY);
+      const response = await fetchDekuDealsGames(DEFAULT_SHARE_KEY);
+      snapshot = JSON.stringify(response);
+      applyShared(response);
     } catch {
       initGames();
     }
+    if (import.meta.env.DEV || !DEFAULT_SHARE_KEY) return;
+    try {
+      const live = await fetchDekuDealsGames(DEFAULT_SHARE_KEY, true);
+      if (JSON.stringify(live) !== snapshot) applyShared(live);
+    } catch {
+      // keep what is already shown
+    }
   };
 
-  // Loads another user's public collection; the current data is kept if it fails
-  const loadShared = async (key: string) => {
-    const response = await fetchDekuDealsGames(key);
+  const applyShared = (response: Awaited<ReturnType<typeof fetchDekuDealsGames>>) => {
     setLoadCount((count) => count + 1);
     dispatch({
       type: actionTypes.LOAD_JSON_INFORMATION,
       payload: { response: { ...response, remote: true } },
     });
+  };
+
+  // Loads another user's public collection; the current data is kept if it fails
+  const loadShared = async (key: string) => {
+    applyShared(await fetchDekuDealsGames(key));
   };
 
   const getListByPage = (page: number, source: IGame[], current: IGame[]) => {

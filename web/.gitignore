@@ -20,3 +20,6 @@ __snapshots__
 .env.production.local
 
 npm-debug.log*
+
+# generated at build time
+public/api/snapshot/

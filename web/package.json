@@ -8,6 +8,7 @@
     },
     "scripts": {
         "start": "vite",
+        "prebuild": "node scripts/snapshot-lists.mjs",
         "build": "tsc --noEmit && vite build",
         "preview": "vite preview",
         "test": "vitest",
